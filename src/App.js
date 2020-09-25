@@ -1,24 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
+import Head from './component/layout/head/index.jsx';
+import Container from './component/layout/container/index.jsx';
 import './App.css';
+// 由于 antd 组件的默认文案是英文，所以需要修改为中文
+import zhCN from 'antd/es/locale/zh_CN';
+import 'antd/dist/antd.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Head />
+        <Container />
     </div>
   );
 }

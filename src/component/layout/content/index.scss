@@ -1,0 +1,30 @@
+.content{
+    flex: 1;
+    width: 80vw;
+    height: 100%;
+    background: #a7a6a5;
+    .console{
+        width: 100%;
+        height: 80px;
+        background:#d8d2d4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color:gray;
+        .i_lable{
+            background: white;
+            margin-right: 30px;
+            padding: 10px;
+        }
+        .i_info{
+            background: ghostwhite;
+            margin-right: 20px;
+            padding: 10px;
+        }
+    } 
+    .phone_canvas{
+        margin: 20px auto 0px;
+        overflow: scroll;
+    }
+}
