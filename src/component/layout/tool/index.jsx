@@ -1,8 +1,9 @@
 import React ,{useEffect} from 'react'
 import './index.scss'
 import { useDrag } from 'react-dnd'
-
-
+import ImgComponent from '../../tools/Img';
+import WheelCompontent from '../../tools/wheel';
+import TextCompontent from '../../tools/text';
 function Tool() {
     const [{ isDragging }, drag] = useDrag({
         item: { type: 'btn',value:'大转盘' },
@@ -10,13 +11,11 @@ function Tool() {
             isDragging: !!monitor.isDragging(),
         }),
     })
-    return <div className="tool"><div className="btn" id="btn" ref={drag}
-        style={{
-            opacity: isDragging ? 0.5 : 1,
-            fontSize: 25,
-            fontWeight: 'bold',
-            cursor: 'move',
-        }}>大转盘</div></div>
+    return <div className="tool">
+        <WheelCompontent></WheelCompontent>
+        <ImgComponent></ImgComponent>
+        <TextCompontent></TextCompontent>
+        </div>
 }
 
 
