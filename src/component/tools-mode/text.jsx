@@ -5,12 +5,12 @@ import { useDrag } from 'react-dnd'
 //文本框工具
 function Text() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'text', id: 'text' },
+        item: { type: 'text', id: 'text-origin' },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     })
-    return <div id="text" ref={drag}
+    return <div id="text-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,
             cursor: 'move',

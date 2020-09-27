@@ -5,12 +5,12 @@ import { useDrag } from 'react-dnd'
 
 function ImgComponent() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'img', id: 'img' },
+        item: { type: 'img', id: 'img-origin' },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     })
-    return <div id="img" ref={drag}
+    return <div id="img-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,
             cursor: 'move',

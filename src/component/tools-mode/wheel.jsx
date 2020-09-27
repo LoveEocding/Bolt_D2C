@@ -5,12 +5,12 @@ import { useDrag } from 'react-dnd'
 
 function Wheel() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'wheel',id:'wheel'},
+        item: { type: 'wheel',id:'wheel-origin'},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     })
-    return <div id="img" ref={drag}
+    return <div id="wheel-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,
             cursor: 'move',

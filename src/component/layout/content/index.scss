@@ -3,6 +3,7 @@
     width: 80vw;
     height: 100%;
     background: #a7a6a5;
+
     .console{
         width: 100%;
         height: 80px;
@@ -26,5 +27,7 @@
     .phone_canvas{
         margin: 20px auto 0px;
         overflow: scroll;
+        position: relative;
+        background: white;
     }
 }
