@@ -3,14 +3,13 @@
     width: 80vw;
     height: 100%;
     background: #a7a6a5;
-
     .console{
         width: 100%;
         height: 80px;
         background:#d8d2d4;
         display: flex;
         align-items: center;
-        justify-content: center;
+        padding-left: 23%;
         font-size: 16px;
         color:gray;
         .i_lable{
@@ -24,10 +23,53 @@
             padding: 10px;
         }
     } 
-    .phone_canvas{
-        margin: 20px auto 0px;
-        overflow: scroll;
-        position: relative;
-        background: white;
+    .content_panel{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        .phone_canvas{
+            margin: 20px 0px 0px 20%;
+            overflow: scroll;
+            position: relative;
+            background: white;
+        }
+        .panel_attributes{
+            width: 20%;
+            height: 100%;
+            background: white;
+            margin-left: auto;
+            .panel_head{
+                width:100%;
+                height: 50px;
+                background:#e6dbdf;
+                font-size: 20px;
+                line-height: 50px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            .describe{
+                width: 100%;
+                padding: 5px 10px;
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                .lable{
+
+                }
+                .value{
+                    min-width: 20px;
+                    background:#e8e4e4;
+                    padding: 5px;
+                    margin-right: 10px;
+                    input{
+                        display: block;
+                        border: none;
+                        width: 50px;
+                        height: 30px;
+                    }
+                }
+            }
+        }
     }
+
 }

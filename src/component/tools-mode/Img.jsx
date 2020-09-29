@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd'
 
 function ImgComponent() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'img', id: 'img-origin' },
+        item: { type:'UseTool.Img', id: 'img-origin' },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),

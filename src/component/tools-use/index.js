@@ -1,5 +1,5 @@
-import img from './img.jsx';
+import Img from './img.jsx';
 
 export default {
-    img
+    Img
 }
