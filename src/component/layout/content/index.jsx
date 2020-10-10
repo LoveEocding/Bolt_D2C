@@ -63,20 +63,14 @@ const drawLine = (width, height) => {
 function Content() {
     //瀑布流已经有的高度
     var treeHeight = 0;
+    //历史路由状态树
+    const [routerData, setRouteData] = useState([]);
     //生成状态树
     const [treeData, setTreeData] = useState([]);
     // 声明一个叫 "count" 的 state 变量
     const [phoneIndex, setPhoneIndex] = useState(0);
     //设置当前编辑样式数据
-    const [currentStyle, setCurrentStyle] = useState({
-        name: '',
-        type: '基础元素',
-        width: '',
-        height: '',
-        left: '',
-        top: '',
-        background: '#333333'
-    })
+    const [currentStyle, setCurrentStyle] = useState([]);
     //颜色选择题是否显示
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const [{ isOver }, drop] = useDrop({
@@ -99,19 +93,19 @@ function Content() {
             left: x - originX,
             position: 'absolute'
         }
-        treeAdd(item.type, styleSheet);
+        treeAdd(item, styleSheet);
         treeHeight += (y - originY - treeHeight + 64);
         console.log(treeHeight);
     }
     //往状态树添加一个div
-    const treeAdd = (type, styleSheet) => {
+    const treeAdd = (item, styleSheet) => {
         let node = undefined;
-        switch (type) {
+        switch (item.type) {
             case 'UseTool.Img':
                 node = UseTool.Img;
             default:
         }
-        treeData.push({ name: node, styleSheet: styleSheet, childNode: [] });
+        treeData.push({ name: node, dataAttr: item.dataAttr, styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
         setTreeData(treeData);
     }
     //状态树渲染
@@ -119,8 +113,13 @@ function Content() {
         if (tree.length === 0) {
             return '';
         }
-        return tree.map(item => <item.name styleSheet={item.styleSheet} key={Math.random() + 100} >{treeRender(item.childNode)}</item.name>);
+        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={Math.random() + 100} >{treeRender(item.childNode)}</item.name>);
 
+    }
+    //点击编辑当前
+    const localEditComponent = (item) => {
+        console.log(item);
+        setCurrentStyle(item.styleAttr);
     }
     //颜色改变
     const onCompleteColor = (e) => {
@@ -129,11 +128,11 @@ function Content() {
         setCurrentStyle({ ...currentStyle });
         console.log(currentStyle);
     }
-    
+
     //显示与否颜色选择器
-    const colorPickerHand=(boolen)=>{
+    const colorPickerHand = (boolen) => {
         setDisplayColorPicker(boolen);
-    }  
+    }
 
     //设置机型选择菜单
     const menu = (
@@ -141,8 +140,13 @@ function Content() {
             {PhoneList.map((item, index) => <Menu.Item key={index}>{item.name}</Menu.Item>)}
         </Menu>
     );
+    //获取当前渲染页面的html
+    const getLocalEditHtml = () => {
+        console.log(document.getElementById('phone_canvas').innerHTML);
+    }
     return <div className="content" id="content">
         <div className="console">
+            <div className="btn">上一页</div>
             <Dropdown className="i_lable" overlay={menu} placement="bottomLeft">
                 <div onClick={e => e.preventDefault()}>
                     {PhoneList[phoneIndex].name}
@@ -151,48 +155,55 @@ function Content() {
             <div className="i_info">{PhoneList[phoneIndex].width}</div>
              x &nbsp;&nbsp;&nbsp;&nbsp;
             <div className="i_info">{PhoneList[phoneIndex].height}</div>
+            <div className="btn" onClick={getLocalEditHtml} >获取HTML代码</div>
+            <div className="btn">预览</div>
         </div>
         <div className="content_panel">
+            {/* 功能属性*/}
+            <div className="panel_attributes" style={{ marginLeft: 'inherit' }}>
+                <div className="panel_head" >功能属性</div>
+                <div className="describe">
+                    <div className="lable">图片链接：</div>
+                    <div className="value"><input /></div>
+                </div>
+            </div>
             <div className="phone_canvas" id="phone_canvas" ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {/* <canvas style={{ position:'absolute',top:0,left:0  }} width={PhoneList[phoneIndex].width} height={PhoneList[phoneIndex].height} id="content_canvas">
                 </canvas> */}
                 {treeRender(treeData)}
             </div>
+
             {/* 属性面板 */}
             <div className="panel_attributes">
-                <div className="panel_head" >组件属性</div>
-                <div className="describe">
+                <div className="panel_head" >样式属性</div>
+                {/* <div className="describe">
                     <div className="lable">名称：</div>
-            <div className="value">选中元素</div>
-                </div>
-                <div className="describe">
+                    <div className="value">选中元素</div>
+                </div> */}
+                {/* <div className="describe">
                     <div className="lable">类型：</div>
                     <div className="value">基础组件</div>
-                </div>
+                </div> */}
+                {currentStyle.map(item => 
                 <div className="describe">
-                    <div className="lable">位置(父元素定位)：</div>
-                    <div className="value"><input /></div>
-                    <div className="value"><input /></div>
-                </div>
-                <div className="describe">
-                    <div className="lable">大小：</div>
-                    <div className="value"><input /></div>
-                    <div className="value"><input /></div>
-                </div>
+                    <div className="lable">{item.lable}：</div>
+                    { item.value.map(itemx=><div className="value" ><input /></div>)  }
+                    
+                </div>)}
                 <div className="describe">
                     <div className="lable">背景颜色：</div>
-                    <div className="value" onClick={()=>colorPickerHand(true)}>{currentStyle.background}</div>
-                    <div onClick={()=>colorPickerHand(true)} style={{ width:30,height:30,backgroundColor:currentStyle.background }}></div>
-                    {displayColorPicker ? <div style={{ position: 'absolute',top:50, zIndex: 2 }}>
+                    <div className="value" onClick={() => colorPickerHand(true)}>{currentStyle.background}</div>
+                    <div onClick={() => colorPickerHand(true)} style={{ width: 30, height: 30, backgroundColor: currentStyle.background }}></div>
+                    {displayColorPicker ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
                         <div style={{
                             position: 'fixed',
-                            top:0,
-                            right:0,
-                            bottom:0,
-                            left:0,
-                        }} onClick={()=>colorPickerHand(false) } />
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            left: 0,
+                        }} onClick={() => colorPickerHand(false)} />
                         <SketchPicker color={currentStyle.background} onChangeComplete={onCompleteColor} />
-                    </div> : null} 
+                    </div> : null}
                 </div>
             </div>
         </div>

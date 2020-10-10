@@ -3,13 +3,20 @@
     width: 80vw;
     height: 100%;
     background: #a7a6a5;
+    .btn{
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid rgb(168, 166, 170);
+        margin-right: 20px;
+        cursor: pointer;
+    }
     .console{
         width: 100%;
         height: 80px;
         background:#d8d2d4;
         display: flex;
         align-items: center;
-        padding-left: 23%;
+        justify-content: center;
         font-size: 16px;
         color:gray;
         .i_lable{
@@ -32,6 +39,9 @@
             overflow: scroll;
             position: relative;
             background: white;
+        }
+        .preview{
+            margin-left: 30px;
         }
         .panel_attributes{
             width: 20%;

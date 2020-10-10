@@ -5,7 +5,29 @@ import { useDrag } from 'react-dnd'
 
 function ImgComponent() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type:'UseTool.Img', id: 'img-origin' },
+        item: { type:'UseTool.Img', id: 'img-origin',dataAttr:[{
+            lable:'图片链接',
+            type:'text',
+            value:''
+        }],
+        styleAttr:[
+            {
+                lable:'大小',
+                type:'number',
+                value:['','']
+            },
+            {
+                lable:'位置',
+                type:'number',
+                value:['','']
+            },
+            {
+                lable:'圆弧',
+                type:'number',
+                value:[''],
+            },
+        ]
+        },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
