@@ -5,32 +5,57 @@ import { useDrag } from 'react-dnd'
 
 function ImgComponent() {
     const [{ isDragging }, drag] = useDrag({
-        item: { type:'UseTool.Img', id: 'img-origin',dataAttr:[{
-            lable:'图片链接',
-            type:'text',
-            value:''
-        }],
-        styleAttr:[
-            {
-                lable:'大小',
-                type:'number',
-                value:['','']
+        item: {
+            type: 'UseTool.Img', id: 'img-origin', dataAttr: [{
+                lable: '图片链接',
+                type: 'text',
+                value: ''
+            }],
+            styleAttr: {
+                width: {
+                    lable:'宽',
+                    type: 'text',
+                    value: '20px'
+                }, height: {
+                    lable:'高',
+                    type: 'text',
+                    value: '20px'
+                }, display: {
+                    lable:'盒类型',
+                    type: 'select',
+                    value:'',
+                    select: ['flex', 'block', 'inline-block']
+                },
+                position:{
+                   lable:'定位',
+                   type:'select',
+                   value:'',
+                   select:['fixed','relative','absolute']
+                },
+                alignItems: { 
+                    lable:'主轴方向对齐方式',    
+                    type: 'select',
+                    value:'',
+                    select: ['center', 'flex-end', 'flex-start']
+                }, justifyContent: {
+                    lable:'副轴对齐方式',
+                    type: 'select',
+                    value:'',
+                    select: ['center', 'flex-end', 'flex-start']
+                }, marginLeft: {
+                    lable:'左间距',
+                    type: 'text',
+                    value: '0px'
+                }, marginTop: {
+                    lable:'上间距',
+                    type: 'text',
+                    value: '0px'
+                }
             },
-            {
-                lable:'位置',
-                type:'number',
-                value:['','']
-            },
-            {
-                lable:'圆弧',
-                type:'number',
-                value:[''],
-            },
-        ]
-        },
-        collect: monitor => ({
-            isDragging: !!monitor.isDragging(),
-        }),
+            collect: monitor => ({
+                isDragging: !!monitor.isDragging(),
+            }),
+        }
     })
     return <div id="img-origin" ref={drag}
         style={{

@@ -71,6 +71,8 @@ function Content() {
     const [phoneIndex, setPhoneIndex] = useState(0);
     //设置当前编辑样式数据
     const [currentStyle, setCurrentStyle] = useState([]);
+    //声明一个当前正在编辑的ID
+    const [localDomId, setLocalDomId] = useState('');
     //颜色选择题是否显示
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const [{ isOver }, drop] = useDrop({
@@ -80,9 +82,6 @@ function Content() {
             isOver: !!monitor.isOver(),
         }),
     })
-    useEffect(() => {
-        //drawLine(PhoneList[phoneIndex].width, PhoneList[phoneIndex].height);
-    });
     //拖拽函数
     const dragEnd = (item, monitor) => {
         let phoneNode = document.getElementById('phone_canvas');
@@ -97,7 +96,7 @@ function Content() {
         treeHeight += (y - originY - treeHeight + 64);
         console.log(treeHeight);
     }
-    //往状态树添加一个div
+    //往状态树插入一个div
     const treeAdd = (item, styleSheet) => {
         let node = undefined;
         switch (item.type) {
@@ -105,23 +104,51 @@ function Content() {
                 node = UseTool.Img;
             default:
         }
-        treeData.push({ name: node, dataAttr: item.dataAttr, styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
+        treeData.push({ name: node, dataAttr: item.dataAttr, id: 'kkkk', styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
         setTreeData(treeData);
+    }
+    //快速查找某个节点
+    const findNode=(id,tree,styleSheet)=>{
+        console.log(tree,id);
+        if(tree.length===0){
+            return tree;
+        }
+        all:for(let i=0;i<tree.length;i++){
+            if(tree[i].id===id){
+                tree[i].styleSheet=styleSheet;
+                break all;
+            }else{
+                tree[i].childNode=findNode(id,tree[i].childNode,styleSheet);
+            }
+        }
+        return tree;
     }
     //状态树渲染
     const treeRender = (tree) => {
         if (tree.length === 0) {
             return '';
         }
-        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={Math.random() + 100} >{treeRender(item.childNode)}</item.name>);
+        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={new Date().getTime()} id={item.id} >{treeRender(item.childNode)}</item.name>);
 
     }
-    //点击编辑当前
+    //点击编辑当前 
     const localEditComponent = (item) => {
-        console.log(item);
-        setCurrentStyle(item.styleAttr);
+        setLocalDomId(item.id);
+        let styleSheet = document.getElementById(item.id).style;
+        let tempSheet = [];
+        for (let i in item.styleAttr) {
+            tempSheet.push({
+                mean: i,
+                lable:item.styleAttr[i].lable,
+                value: styleSheet[i],
+                type: item.styleAttr[i].type,
+                select: item.styleAttr[i].select
+            })
+        }
+        console.log(tempSheet);
+        setCurrentStyle(tempSheet);
     }
-    //颜色改变
+    //颜色改变 
     const onCompleteColor = (e) => {
         console.log(e);
         currentStyle.background = e.hex;
@@ -140,9 +167,39 @@ function Content() {
             {PhoneList.map((item, index) => <Menu.Item key={index}>{item.name}</Menu.Item>)}
         </Menu>
     );
+    //设置选择框菜单
+    const styleMenu = (attr, item) => {
+        return <Menu onClick={({ key }) => selectChange(attr, key)}>
+            {item.map(itemx => <Menu.Item key={itemx}>{itemx}</Menu.Item>)}
+        </Menu>
+
+    }
     //获取当前渲染页面的html
     const getLocalEditHtml = () => {
         console.log(document.getElementById('phone_canvas').innerHTML);
+    }
+    //编辑当前样式输入框
+    const styleChange = (event, mean) => {
+        let styleSheet={};
+        for(let item of currentStyle){
+            styleSheet[item.mean]=item.value;
+        }
+        styleSheet[mean]=event.target.value;
+        setTreeData(findNode(localDomId,treeData,styleSheet));
+    }
+    //编辑当前样式选择框
+    const selectChange = (mean, value) => {
+        let tempSheet =JSON.parse(JSON.stringify(currentStyle)) ;
+        let styleSheet = document.getElementById(localDomId).style;
+        let localSheet={};
+        for (let i in currentStyle) {
+            tempSheet[i].value=styleSheet[currentStyle[i].mean];
+            localSheet[currentStyle[i].mean]=currentStyle[i].value;
+        }
+        setCurrentStyle(tempSheet);
+        localSheet[mean]=value;
+        setTreeData(findNode(localDomId,treeData,localSheet));
+
     }
     return <div className="content" id="content">
         <div className="console">
@@ -161,6 +218,7 @@ function Content() {
         <div className="content_panel">
             {/* 功能属性*/}
             <div className="panel_attributes" style={{ marginLeft: 'inherit' }}>
+
                 <div className="panel_head" >功能属性</div>
                 <div className="describe">
                     <div className="lable">图片链接：</div>
@@ -168,28 +226,21 @@ function Content() {
                 </div>
             </div>
             <div className="phone_canvas" id="phone_canvas" ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
-                {/* <canvas style={{ position:'absolute',top:0,left:0  }} width={PhoneList[phoneIndex].width} height={PhoneList[phoneIndex].height} id="content_canvas">
-                </canvas> */}
                 {treeRender(treeData)}
             </div>
 
             {/* 属性面板 */}
             <div className="panel_attributes">
                 <div className="panel_head" >样式属性</div>
-                {/* <div className="describe">
-                    <div className="lable">名称：</div>
-                    <div className="value">选中元素</div>
-                </div> */}
-                {/* <div className="describe">
-                    <div className="lable">类型：</div>
-                    <div className="value">基础组件</div>
-                </div> */}
-                {currentStyle.map(item => 
-                <div className="describe">
-                    <div className="lable">{item.lable}：</div>
-                    { item.value.map(itemx=><div className="value" ><input /></div>)  }
-                    
-                </div>)}
+                {currentStyle.map(item =>
+                    <div className="describe">
+                        <div className="lable">{item.lable}：</div>
+                        {item.type === 'select' ? <Dropdown className="value" overlay={() => styleMenu(item.mean, item.select)} placement="bottomLeft">
+                            <div onClick={e => e.preventDefault()}>
+                                {item.value}
+                            </div>
+                        </Dropdown> : <div className="value" ><input mean={item.mean} onChange={(event) => styleChange(event, item.mean)} /></div>}
+                    </div>)}
                 <div className="describe">
                     <div className="lable">背景颜色：</div>
                     <div className="value" onClick={() => colorPickerHand(true)}>{currentStyle.background}</div>
@@ -205,12 +256,12 @@ function Content() {
                         <SketchPicker color={currentStyle.background} onChangeComplete={onCompleteColor} />
                     </div> : null}
                 </div>
+
             </div>
         </div>
 
     </div>
 }
-
 
 
 
