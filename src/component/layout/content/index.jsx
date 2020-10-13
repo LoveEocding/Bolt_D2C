@@ -22,13 +22,13 @@ function Content() {
     //颜色选择题是否显示
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const [{ isOver }, drop] = useDrop({
-        accept: ['UseTool.Img', 'text', 'wheel'],
+        accept: ['UseTool.Img','UseTool.Div','UseComponent.Img','UseComponent.Div'],
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
     })
-    //拖拽函数
+    //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
@@ -36,43 +36,82 @@ function Content() {
         let styleSheet = {
             top: y - originY - treeHeight,
             left: x - originX,
-            position: 'absolute'
+            position: 'absolute',
+            width: 60,
+            height: 60
         }
-        treeAdd(item, styleSheet);
+        if (item.isHave) {
+            let resultSheet = findNode(item.id, treeData).styleSheet;
+            resultSheet.top = y - originY - treeHeight;
+            resultSheet.left = x - originX;
+            console.info(resultSheet, item.id);
+            insertNodeStyle(item.id, treeData, resultSheet);
+        } else {
+            treeAdd(item, styleSheet);
+        }
         treeHeight += (y - originY - treeHeight + 64);
         console.log(treeHeight);
+    }
+    //工具拖拽并插入一个div
+    const dragTool = (parentNode, item) => {
+
+    }
+    //已存在的组件拖拽
+    const dragUse = (parentNode, item) => {
+
     }
     //往状态树插入一个div
     const treeAdd = (item, styleSheet) => {
         let node = undefined;
         switch (item.type) {
-            case 'UseTool.Img':
-                node = UseTool.Img;
+            case 'UseTool.Div':
+                node = UseTool.Div;
             default:
         }
-        treeData.push({ name: node, dataAttr: item.dataAttr, id:makeOnlyId(), styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
+        treeData.push({ name: node, dataAttr: item.dataAttr, id: makeOnlyId(), styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
         //setTreeData(treeData);
         console.log(treeData);
     }
     //生成唯一ID
-    const makeOnlyId=()=>{
-        return new Date().getTime()-1000;
+    const makeOnlyId = () => {
+        return new Date().getTime() - 1000;
     }
-    //快速查找某个节点
-    const findNode=(id,tree,styleSheet)=>{
-        console.log(tree,id);
-        if(tree.length===0){
+    //快速给某个节点插入样式
+    const insertNodeStyle = (id, tree, styleSheet) => {
+        console.log(tree, id);
+        if (tree.length === 0) {
             return tree;
         }
-        all:for(let i=0;i<tree.length;i++){
-            if(tree[i].id===id){
-                tree[i].styleSheet=styleSheet;
+        all: for (let i = 0; i < tree.length; i++) {
+            if (tree[i].id === id) {
+                tree[i].styleSheet = styleSheet;
                 break all;
-            }else{
-                tree[i].childNode=findNode(id,tree[i].childNode,styleSheet);
+            } else {
+                tree[i].childNode = insertNodeStyle(id, tree[i].childNode, styleSheet);
             }
         }
         return tree;
+    }
+    //快速查找某个节点并返回
+    const findNode = (id, tree) => {
+        console.log(id, tree);
+        if (tree.length === 0) {
+            return false;
+        }
+        //依次遍历兄弟结点
+        for (let i = 0; i < tree.length; i++) {
+            if (tree[i].id === id) {
+                return tree[i];
+            }
+        }
+        //接着遍历子结点
+        for (let i = 0; i < tree.length; i++) {
+            let result = findNode(id, tree[i].childNode);
+            if (result) {
+                return result;
+            }
+        }
+        return false;
     }
     //快速删除某个节点
     //状态树渲染
@@ -86,30 +125,33 @@ function Content() {
     //点击编辑当前 
     const localEditComponent = (item) => {
         setLocalDomId(item.id);
-        let styleSheet = document.getElementById(item.id).style;
+        let styleSheet = findNode(item.id, treeData).styleSheet;
         let tempSheet = [];
         for (let i in item.styleAttr) {
             tempSheet.push({
                 mean: i,
-                lable:item.styleAttr[i].lable,
+                lable: item.styleAttr[i].lable,
                 value: styleSheet[i],
                 type: item.styleAttr[i].type,
                 select: item.styleAttr[i].select
             })
         }
-        setCurrentStyle(tempSheet);
+        console.log(tempSheet);
+        setCurrentStyle([].concat(tempSheet));
     }
     //颜色改变 
-    const onCompleteColor = (e) => {
-        console.log(e);
-        currentStyle.background = e.hex;
-        setCurrentStyle({ ...currentStyle });
-        console.log(currentStyle);
+    const onCompleteColor = (e, mean) => {
+        selectChange(mean, e.hex);
     }
 
     //显示与否颜色选择器
-    const colorPickerHand = (boolen) => {
-        setDisplayColorPicker(boolen);
+    const colorPickerHand = (boolen,mean) => {
+        for (let i in currentStyle) {
+            if (currentStyle[i].mean === mean) {
+                currentStyle[i].pickerIsShow = boolen;
+            }
+        }
+        setCurrentStyle([].concat(currentStyle));
     }
 
     //设置机型选择菜单
@@ -131,27 +173,27 @@ function Content() {
     }
     //编辑当前样式输入框
     const styleChange = (event, mean) => {
-        let styleSheet={};
-        for(let i in currentStyle){
-            if(currentStyle[i].mean===mean){
-                currentStyle[i].value=Number(event.target.value)
+        let styleSheet = {};
+        for (let i in currentStyle) {
+            if (currentStyle[i].mean === mean) {
+                currentStyle[i].value = Number(event.target.value)
             }
-            styleSheet[currentStyle[i].mean]=currentStyle[i].value;
+            styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
-        setTreeData([].concat(findNode(localDomId,treeData,styleSheet)));
+        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
     }
     //编辑当前样式选择框
     const selectChange = (mean, value) => {
 
-        let styleSheet={};
+        let styleSheet = {};
         for (let i in currentStyle) {
-            if(currentStyle[i].mean===mean){
-                currentStyle[i].value=value;
+            if (currentStyle[i].mean === mean) {
+                currentStyle[i].value = value;
             }
-            styleSheet[currentStyle[i].mean]=currentStyle[i].value;
+            styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
         setCurrentStyle([].concat(currentStyle));
-        setTreeData([].concat(findNode(localDomId,treeData,styleSheet)));
+        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
 
     }
     return <div className="content" id="content">
@@ -186,29 +228,38 @@ function Content() {
             <div className="panel_attributes">
                 <div className="panel_head" >样式属性</div>
                 {currentStyle.map(item =>
-                    <div className="describe">
-                        <div className="lable">{item.lable}：</div>
-                        {item.type === 'select' ? <Dropdown className="value" overlay={() => styleMenu(item.mean, item.select)} placement="bottomLeft">
-                            <div onClick={e => e.preventDefault()}>
-                                {item.value}
-                            </div>
-                        </Dropdown> : <div className="value" ><input mean={item.mean} onChange={(event) => styleChange(event, item.mean)} /></div>}
-                    </div>)}
-                <div className="describe">
-                    <div className="lable">背景颜色：</div>
-                    <div className="value" onClick={() => colorPickerHand(true)}>{currentStyle.background}</div>
-                    <div onClick={() => colorPickerHand(true)} style={{ width: 30, height: 30, backgroundColor: currentStyle.background }}></div>
-                    {displayColorPicker ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
-                        <div style={{
-                            position: 'fixed',
-                            top: 0,
-                            right: 0,
-                            bottom: 0,
-                            left: 0,
-                        }} onClick={() => colorPickerHand(false)} />
-                        <SketchPicker color={currentStyle.background} onChangeComplete={onCompleteColor} />
-                    </div> : null}
-                </div>
+                    <>
+
+                        {item.type === 'color' ? <div className="describe">
+                            <div className="lable">{item.lable}：</div>
+                            <div className="value" onClick={() => colorPickerHand(true,item.mean)}>{item.value}</div>
+                            <div onClick={() => colorPickerHand(true,item.mean)} style={{ width: 30, height: 30, backgroundColor: item.value }}></div>
+                            {item.pickerIsShow ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
+                                <div style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                }} onClick={() => colorPickerHand(false,item.mean)} />
+                                <SketchPicker color={item.value} onChangeComplete={(event) => onCompleteColor(event, item.mean)} />
+                            </div> : null}
+                        </div> :
+                            <div className="describe">
+                                <div className="lable">{item.lable}：</div>
+                                {item.type === 'select' ? <Dropdown className="value" overlay={() => styleMenu(item.mean, item.select)} placement="bottomLeft">
+                                    <div onClick={e => e.preventDefault()}>
+                                        {item.value}
+                                    </div>
+                                </Dropdown> : ''}
+                                {item.type === 'text' ? <div className="value" ><input value={item.value} mean={item.mean} onChange={(event) => styleChange(event, item.mean)} /></div> : ''}
+
+                            </div>}
+                    </>
+                )}
+
+
+
 
             </div>
         </div>

@@ -3,10 +3,10 @@ import { useDrag } from 'react-dnd'
 
 
 
-function ImgUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
+function DivUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
     console.log(id,localDomId);
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'UseComponent.Img', id:id,isHave:true},
+        item: { type: 'UseComponent.Div', id:id,isHave:true},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
@@ -27,5 +27,5 @@ function ImgUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
 }
 
 
-export default ImgUse;
+export default DivUse;
 
