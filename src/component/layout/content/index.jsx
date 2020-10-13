@@ -5,60 +5,6 @@ import PhoneList from '../../../phone.config.js'; //机型数据配置文件
 import { Menu, Dropdown } from 'antd';
 import UseTool from '../../tools-use/index.js'; //引入真实使用的组件
 import { SketchPicker } from 'react-color';
-/**
- * 画布的函数
- */
-const drawLine = (width, height) => {
-    var canvas = document.getElementById('content_canvas');
-    //获得 2d 上下文对象
-    var ctx = canvas.getContext('2d');
-    ctx.fillStyle = "#efefef";
-    //绘制矩形
-    ctx.fillRect(0, 0, width, 20);
-    ctx.fillRect(0, 0, 20, height);
-    ctx.fillRect(width - 20, 0, 30, height);
-    ctx.fillRect(0, height - 20, width, 20);
-    let number = 1;
-    var imageData = ctx.getImageData(0, 0, width, height);
-    for (var i = 0; i < imageData.data.length; i += 4) {
-        // 当该像素是透明的,则设置成白色
-        if (imageData.data[i + 3] == 0) {
-            imageData.data[i] = 255;
-            imageData.data[i + 1] = 255;
-            imageData.data[i + 2] = 255;
-            imageData.data[i + 3] = 255;
-        }
-    }
-    ctx.putImageData(imageData, 0, 0);
-    while (true) {
-        if (number * 12 >= height) {
-            break;
-        }
-        ctx.beginPath(); //新建一条path
-        ctx.moveTo(0, number * 12); //把画笔移动到指定的坐标
-        ctx.lineTo(width, number * 12);  //绘制一条从当前位置到指定坐标(200, 50)的直线.
-        //闭合路径。会拉一条从当前点到path起始点的直线。如果当前点与起始点重合，则什么都不做
-        ctx.closePath();
-        ctx.strokeStyle = "#efefef";
-        ctx.stroke(); //绘制路径。
-        number++;
-    }
-    number = 1;
-    while (true) {
-        if (number * 12 >= width) {
-            break;
-        }
-        ctx.beginPath(); //新建一条path
-        ctx.moveTo(number * 12, 0); //把画笔移动到指定的坐标
-        ctx.lineTo(number * 12, height);  //绘制一条从当前位置到指定坐标(200, 50)的直线.
-        //闭合路径。会拉一条从当前点到path起始点的直线。如果当前点与起始点重合，则什么都不做
-        ctx.closePath();
-        ctx.strokeStyle = "#efefef";
-        ctx.stroke(); //绘制路径。
-        number++;
-    }
-}
-
 
 function Content() {
     //瀑布流已经有的高度
@@ -69,7 +15,7 @@ function Content() {
     const [treeData, setTreeData] = useState([]);
     // 声明一个叫 "count" 的 state 变量
     const [phoneIndex, setPhoneIndex] = useState(0);
-    //设置当前编辑样式数据
+    //设置样式属性 数组
     const [currentStyle, setCurrentStyle] = useState([]);
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
@@ -104,8 +50,13 @@ function Content() {
                 node = UseTool.Img;
             default:
         }
-        treeData.push({ name: node, dataAttr: item.dataAttr, id: 'kkkk', styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
-        setTreeData(treeData);
+        treeData.push({ name: node, dataAttr: item.dataAttr, id:makeOnlyId(), styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
+        //setTreeData(treeData);
+        console.log(treeData);
+    }
+    //生成唯一ID
+    const makeOnlyId=()=>{
+        return new Date().getTime()-1000;
     }
     //快速查找某个节点
     const findNode=(id,tree,styleSheet)=>{
@@ -123,12 +74,13 @@ function Content() {
         }
         return tree;
     }
+    //快速删除某个节点
     //状态树渲染
     const treeRender = (tree) => {
         if (tree.length === 0) {
             return '';
         }
-        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={new Date().getTime()} id={item.id} >{treeRender(item.childNode)}</item.name>);
+        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} >{treeRender(item.childNode)}</item.name>);
 
     }
     //点击编辑当前 
@@ -145,7 +97,6 @@ function Content() {
                 select: item.styleAttr[i].select
             })
         }
-        console.log(tempSheet);
         setCurrentStyle(tempSheet);
     }
     //颜色改变 
@@ -181,24 +132,26 @@ function Content() {
     //编辑当前样式输入框
     const styleChange = (event, mean) => {
         let styleSheet={};
-        for(let item of currentStyle){
-            styleSheet[item.mean]=item.value;
+        for(let i in currentStyle){
+            if(currentStyle[i].mean===mean){
+                currentStyle[i].value=Number(event.target.value)
+            }
+            styleSheet[currentStyle[i].mean]=currentStyle[i].value;
         }
-        styleSheet[mean]=event.target.value;
-        setTreeData(findNode(localDomId,treeData,styleSheet));
+        setTreeData([].concat(findNode(localDomId,treeData,styleSheet)));
     }
     //编辑当前样式选择框
     const selectChange = (mean, value) => {
-        let tempSheet =JSON.parse(JSON.stringify(currentStyle)) ;
-        let styleSheet = document.getElementById(localDomId).style;
-        let localSheet={};
+
+        let styleSheet={};
         for (let i in currentStyle) {
-            tempSheet[i].value=styleSheet[currentStyle[i].mean];
-            localSheet[currentStyle[i].mean]=currentStyle[i].value;
+            if(currentStyle[i].mean===mean){
+                currentStyle[i].value=value;
+            }
+            styleSheet[currentStyle[i].mean]=currentStyle[i].value;
         }
-        setCurrentStyle(tempSheet);
-        localSheet[mean]=value;
-        setTreeData(findNode(localDomId,treeData,localSheet));
+        setCurrentStyle([].concat(currentStyle));
+        setTreeData([].concat(findNode(localDomId,treeData,styleSheet)));
 
     }
     return <div className="content" id="content">
