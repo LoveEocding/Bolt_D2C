@@ -3,26 +3,26 @@ import { useDrag } from 'react-dnd'
 
 
 
-function ImgUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
-    console.log(id,localDomId);
+function DivUseTwo({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'UseComponent.Img', id:id,isHave:true},
+        item: { type: 'UseComponent.DivTwo', id:id,isHave:true},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     })
-    return <div id={id} key={id}  ref={drag} onClick={callback.bind(this,{styleSheet,dataAttr,styleAttr,id})}
+    return <div id={id} key={id}  ref={drag} onClick={(e)=>callback(e,{styleSheet,dataAttr,styleAttr,id})}
         style={{
             opacity: isDragging ? 0 : 1,
             cursor: 'move',
+            display:'flex',
             border:localDomId===id?'1px dotted red':'',
             ...styleSheet
         }}  >
-        点击
+        物理元素
         </div>
 
 }
 
 
-export default ImgUse;
+export default DivUseTwo;
 

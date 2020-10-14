@@ -1,6 +1,8 @@
-import Img from './img.jsx';
+import Float from './float.jsx';
 import Div from './div.jsx';
+import DivTwo from './div_two.jsx';
 export default {
-    Img,
-    Div
+    Float,
+    Div,
+    DivTwo
 }

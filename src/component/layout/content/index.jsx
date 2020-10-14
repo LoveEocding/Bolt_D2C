@@ -19,10 +19,8 @@ function Content() {
     const [currentStyle, setCurrentStyle] = useState([]);
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
-    //颜色选择题是否显示
-    const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const [{ isOver }, drop] = useDrop({
-        accept: ['UseTool.Img','UseTool.Div','UseComponent.Img','UseComponent.Div'],
+        accept: ['UseTool.Div', 'UseComponent.Div'],
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
@@ -33,44 +31,80 @@ function Content() {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
         let [originY, originX] = [phoneNode.offsetTop, phoneNode.offsetLeft]
-        let styleSheet = {
-            top: y - originY - treeHeight,
-            left: x - originX,
-            position: 'absolute',
-            width: 60,
-            height: 60
-        }
         if (item.isHave) {
             let resultSheet = findNode(item.id, treeData).styleSheet;
-            resultSheet.top = y - originY - treeHeight;
-            resultSheet.left = x - originX;
+            resultSheet.marginTop = y - originY - treeHeight;
+            resultSheet.marginLeft = x - originX;
             console.info(resultSheet, item.id);
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
-            treeAdd(item, styleSheet);
+            treeAdd(null, item, y - originY - treeHeight, x - originX);
         }
         treeHeight += (y - originY - treeHeight + 64);
         console.log(treeHeight);
     }
-    //工具拖拽并插入一个div
-    const dragTool = (parentNode, item) => {
-
+    //一级组件添加一个子结点
+    const childDragBack = (parentId, item, y, x) => {
+        if (item.isHave) {
+            let resultSheet = findNode(item.id, treeData).styleSheet;
+            resultSheet.marginTop = y;
+            resultSheet.marginLeft = x;
+            insertNodeStyle(item.id, treeData, resultSheet);
+        } else {
+            treeAdd(parentId, item, y, x);
+        }
     }
-    //已存在的组件拖拽
-    const dragUse = (parentNode, item) => {
-
-    }
-    //往状态树插入一个div
-    const treeAdd = (item, styleSheet) => {
+    //往状态树插入一个div 接受一个上级节点
+    const treeAdd = (parentId, localItem, top, left) => {
         let node = undefined;
-        switch (item.type) {
+        let styleSheet = {};
+        console.log(localItem);
+        switch (localItem.type) {
             case 'UseTool.Div':
                 node = UseTool.Div;
+                styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.flexDirection = 'row';
+                break;
+            case 'UseTool.DivTwo':
+                node = UseTool.DivTwo;
+                styleSheet.width = localItem.styleAttr.width.value;
+                styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.marginTop = top;
+                styleSheet.marginLeft = left;
+                break;
+            case 'UseTool.Float':
+                styleSheet.position = 'absolute';
+                styleSheet.top = top;
+                styleSheet.left = left;
+                node = UseTool.Float;
+                break;
+
             default:
         }
-        treeData.push({ name: node, dataAttr: item.dataAttr, id: makeOnlyId(), styleAttr: item.styleAttr, styleSheet: styleSheet, childNode: [] });
-        //setTreeData(treeData);
-        console.log(treeData);
+        let item = { name: node, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
+        //如果父亲节点id 执行插入子树操作
+        if (parentId) {
+            insertChildNode(parentId, treeData, item);
+        } else {
+            treeData.push(item);
+        }
+        setTreeData([].concat(treeData));
+
+    }
+    //快速给某个节点添加一个子节点
+    const insertChildNode = (id, tree, childNode) => {
+        if (tree.length === 0) {
+            return tree;
+        }
+        all: for (let i = 0; i < tree.length; i++) {
+            if (tree[i].id === id) {
+                tree[i].childNode.push(childNode);
+                break all;
+            } else {
+                tree[i].childNode = insertNodeStyle(id, tree[i].childNode, childNode);
+            }
+        }
+        return tree;
     }
     //生成唯一ID
     const makeOnlyId = () => {
@@ -114,13 +148,31 @@ function Content() {
         return false;
     }
     //快速删除某个节点
+    const deleteNode = (id, tree) => {
+        const lunFind = (id, tree) => {
+            //依次遍历兄弟结点
+            for (let i = 0; i < tree.length; i++) {
+                if (tree[i].id === id) {
+                    tree.splice(i, 1);
+                    return tree;
+                }
+            }
+            //接着遍历子结点
+            for (let i = 0; i < tree.length; i++) {
+                tree[i].childNode = lunFind(id, tree[i].childNode);
+            }
+            return tree;
+        };
+      let result=lunFind(id,tree);  
+      setTreeData([].concat(result));
+    }
     //状态树渲染
     const treeRender = (tree) => {
         if (tree.length === 0) {
             return '';
         }
-        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} >{treeRender(item.childNode)}</item.name>);
-
+        let result = tree.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>);
+        return result;
     }
     //点击编辑当前 
     const localEditComponent = (item) => {
@@ -145,7 +197,7 @@ function Content() {
     }
 
     //显示与否颜色选择器
-    const colorPickerHand = (boolen,mean) => {
+    const colorPickerHand = (boolen, mean) => {
         for (let i in currentStyle) {
             if (currentStyle[i].mean === mean) {
                 currentStyle[i].pickerIsShow = boolen;
@@ -216,11 +268,16 @@ function Content() {
 
                 <div className="panel_head" >功能属性</div>
                 <div className="describe">
+                    <div className="lable">操作：</div>
+                    <div className="action" onClick={() => deleteNode(localDomId, treeData)}>删除节点</div>
+                </div>
+                <div className="describe">
                     <div className="lable">图片链接：</div>
                     <div className="value"><input /></div>
                 </div>
             </div>
-            <div className="phone_canvas" id="phone_canvas" ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+
+            <div className="phone_canvas" id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {treeRender(treeData)}
             </div>
 
@@ -232,8 +289,8 @@ function Content() {
 
                         {item.type === 'color' ? <div className="describe">
                             <div className="lable">{item.lable}：</div>
-                            <div className="value" onClick={() => colorPickerHand(true,item.mean)}>{item.value}</div>
-                            <div onClick={() => colorPickerHand(true,item.mean)} style={{ width: 30, height: 30, backgroundColor: item.value }}></div>
+                            <div className="value" onClick={() => colorPickerHand(true, item.mean)}>{item.value}</div>
+                            <div onClick={() => colorPickerHand(true, item.mean)} style={{ width: 30, height: 30, backgroundColor: item.value }}></div>
                             {item.pickerIsShow ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
                                 <div style={{
                                     position: 'fixed',
@@ -241,7 +298,7 @@ function Content() {
                                     right: 0,
                                     bottom: 0,
                                     left: 0,
-                                }} onClick={() => colorPickerHand(false,item.mean)} />
+                                }} onClick={() => colorPickerHand(false, item.mean)} />
                                 <SketchPicker color={item.value} onChangeComplete={(event) => onCompleteColor(event, item.mean)} />
                             </div> : null}
                         </div> :

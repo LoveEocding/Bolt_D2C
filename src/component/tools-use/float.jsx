@@ -3,10 +3,10 @@ import { useDrag } from 'react-dnd'
 
 
 
-function ImgUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
+function DivUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
     console.log(id,localDomId);
     const [{ isDragging }, drag] = useDrag({
-        item: { type: 'UseComponent.Img', id:id,isHave:true},
+        item: { type: 'UseComponent.Div', id:id,isHave:true},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
@@ -18,11 +18,11 @@ function ImgUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
             border:localDomId===id?'1px dotted red':'',
             ...styleSheet
         }}  >
-        点击
+        悬浮元素
         </div>
 
 }
 
 
-export default ImgUse;
+export default DivUse;
 

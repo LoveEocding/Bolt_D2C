@@ -3,10 +3,10 @@ import { useDrag } from 'react-dnd'
 
 
 
-function DivComponent() {
+function DivTwoComponent() {
     const [{ isDragging }, drag] = useDrag({
         item: {
-            type: 'UseTool.Div',
+            type: 'UseTool.DivTwo',
             id: 'div-origin',
             isHave:false,
             dataAttr: [{
@@ -15,6 +15,11 @@ function DivComponent() {
                 value: ''
             }],
             styleAttr: {
+                width:{
+                   lable:'宽',
+                   type:'text',
+                   value:60
+                },
                 height: {
                     lable: '高',
                     type: 'text',
@@ -87,12 +92,12 @@ function DivComponent() {
             height: 64,
             width: 64
         }}>
-        <svg t="1602574533973" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3033" width="64" height="64"><path d="M512 549.76a34.56 34.56 0 0 1-16-3.84L295.04 429.44a30.72 30.72 0 0 1-16-27.52V169.6a30.72 30.72 0 0 1 16-27.52L496 26.24a32 32 0 0 1 32 0l200.96 115.84a30.72 30.72 0 0 1 16 27.52v232.32a30.72 30.72 0 0 1-16 27.52L528 545.92a34.56 34.56 0 0 1-16 3.84zM343.04 384L512 481.28 680.96 384V188.16L512 90.24 343.04 188.16zM256 992a27.52 27.52 0 0 1-16-4.48l-204.8-115.84a33.28 33.28 0 0 1-16-28.16V611.84a33.28 33.28 0 0 1 16-28.16L236.8 467.84a32 32 0 0 1 32 0l200.96 115.84a33.28 33.28 0 0 1 16 28.16v231.68a33.28 33.28 0 0 1-16 28.16L268.8 987.52a30.08 30.08 0 0 1-12.8 4.48z m-172.8-166.4L256 922.88l165.76-97.28V630.4L256 532.48 83.2 630.4zM771.2 992a30.08 30.08 0 0 1-16-4.48l-200.96-115.84a33.28 33.28 0 0 1-16-28.16V611.84a33.28 33.28 0 0 1 16-28.16l200.96-115.84a32 32 0 0 1 32 0l201.6 115.84a33.28 33.28 0 0 1 16 28.16v231.68a33.28 33.28 0 0 1-16 28.16l-201.6 115.84a27.52 27.52 0 0 1-16 4.48z m-168.96-166.4l168.96 97.28 169.6-97.28V630.4l-169.6-97.92-168.96 97.92z" fill="#707070" p-id="3034"></path></svg>
-        容器组件
+        <svg t="1602641269835" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2866" width="64" height="64"><path d="M740.867 908.41H283.132L54.265 512l228.867-396.41h457.735L969.735 512 740.867 908.41z m-400-100h342.266L854.265 512 683.133 215.59H340.867L169.735 512l171.132 296.41z" p-id="2867" fill="#8a8a8a"></path></svg>
+        单元组件
         </div>
 
 }
 
 
-export default DivComponent;
+export default DivTwoComponent;
 

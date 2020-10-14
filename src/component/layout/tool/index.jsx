@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react'
 import './index.scss'
-import ImgComponent from '../../tools-mode/Img';
 import ToolDiv from '../../tools-mode/div';
+import ToolFloat from '../../tools-mode/float';
 import WheelCompontent from '../../tools-mode/wheel';
-import TextCompontent from '../../tools-mode/text';
-import DivComponent from '../../tools-mode/container/div';
+//二级组件 存放于一级组件中
+import ToolDivTwo from '../../tools-mode/div_two';
+import ToolFloatTwo from '../../tools-mode/float_two';
 function Tool() {
     return <div className="tool">
         <div className="base-conent">
             <div className="lable">
-               基础组件
+               一级组件
             </div>
             <ToolDiv></ToolDiv>
-            <ImgComponent></ImgComponent>
-            <TextCompontent></TextCompontent>
+            <ToolFloat></ToolFloat>
         </div>
         <div className="base-conent">
             <div className="lable">
-               容器组件
+               二级组件
             </div>
-            <DivComponent></DivComponent>
+            <ToolDivTwo></ToolDivTwo>
+            <ToolFloatTwo></ToolFloatTwo>
         </div>
         <div className="base-conent">
             <div className="lable">
