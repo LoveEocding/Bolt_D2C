@@ -64,7 +64,7 @@ function DivComponent() {
                 backgroundColor:{
                     lable:'背景颜色',
                     type:'color',
-                    value:'#FFFFFF',
+                    value:'#b8eee3',
                     pickerIsShow:false
                 },
                 color:{

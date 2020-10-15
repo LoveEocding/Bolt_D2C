@@ -8,7 +8,7 @@ import { SketchPicker } from 'react-color';
 
 function Content() {
     //瀑布流已经有的高度
-    var treeHeight = 0;
+    const [treeHeight, setTreeHeight] = useState(0);
     //历史路由状态树
     const [routerData, setRouteData] = useState([]);
     //生成状态树
@@ -32,16 +32,42 @@ function Content() {
         let { x, y } = monitor.getSourceClientOffset();
         let [originY, originX] = [phoneNode.offsetTop, phoneNode.offsetLeft]
         if (item.isHave) {
+            //计算已经有的物理高度
+            let resxy = getLastCeilXy(null, treeData, 2);
+            console.log(y, originY, resxy.height + resxy.y);
             let resultSheet = findNode(item.id, treeData).styleSheet;
-            resultSheet.marginTop = y - originY - treeHeight;
+            resultSheet.marginTop = y - originY - resxy.height-resxy.y;
             resultSheet.marginLeft = x - originX;
-            console.info(resultSheet, item.id);
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
             treeAdd(null, item, y - originY - treeHeight, x - originX);
         }
-        treeHeight += (y - originY - treeHeight + 64);
-        console.log(treeHeight);
+        //计算已经有的物理高度
+        let resxy = getLastCeilXy(null, treeData, 1);
+        setTreeHeight(resxy.height + resxy.y);
+    }
+    //获取末尾元素的offsetX offsetY number 1不存在查询末尾元素 2存在查询倒数第二个元素
+    const getLastCeilXy = (parentId, tree, number) => {
+        let resultNode = null;
+        let id=null;
+        if (parentId) {
+            let parentNode=findNode(parentId, tree);
+            if(parentNode.childNode.length===0){
+                resultNode=parentNode;
+                id=resultNode.id; 
+                return { x:0, y:0, height:0,width:0 }; 
+            }else{
+                resultNode=parentNode.childNode;
+                id=resultNode[resultNode.length - number].id;
+            }     
+        } else {
+            resultNode = tree;
+            id=resultNode[resultNode.length - number].id;
+        }
+        let findDocumentNode = document.getElementById(id);
+        let [x, y, height,width] = [findDocumentNode.offsetLeft, findDocumentNode.offsetTop, findDocumentNode.offsetHeight,findDocumentNode.offsetWidth];
+        console.log(x,y,height,width);
+        return { x, y, height,width };
     }
     //一级组件添加一个子结点
     const childDragBack = (parentId, item, y, x) => {
@@ -51,7 +77,9 @@ function Content() {
             resultSheet.marginLeft = x;
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
-            treeAdd(parentId, item, y, x);
+            //查询已经存在的X Y 偏量
+            let resultxy=getLastCeilXy(parentId,treeData,1);
+            treeAdd(parentId, item, y, x-resultxy.x-resultxy.width);
         }
     }
     //往状态树插入一个div 接受一个上级节点
@@ -63,6 +91,7 @@ function Content() {
             case 'UseTool.Div':
                 node = UseTool.Div;
                 styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.backgroundColor=localItem.styleAttr.backgroundColor.value;
                 styleSheet.flexDirection = 'row';
                 break;
             case 'UseTool.DivTwo':
@@ -163,8 +192,8 @@ function Content() {
             }
             return tree;
         };
-      let result=lunFind(id,tree);  
-      setTreeData([].concat(result));
+        let result = lunFind(id, tree);
+        setTreeData([].concat(result));
     }
     //状态树渲染
     const treeRender = (tree) => {
