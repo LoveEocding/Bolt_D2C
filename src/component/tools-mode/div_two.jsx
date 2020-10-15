@@ -44,7 +44,12 @@ function DivTwoComponent() {
                 },marginTop: {
                     lable: '上间距',
                     type: 'text',
-                    value: '0px'
+                    value:0
+                },
+                marginLeft: {
+                    lable: '左间距',
+                    type: 'text',
+                    value:0
                 },
                 paddingTop:{
                     lable:'内边距-上',
@@ -69,7 +74,7 @@ function DivTwoComponent() {
                 backgroundColor:{
                     lable:'背景颜色',
                     type:'color',
-                    value:'#FFFFFF',
+                    value:'#f5c1c1',
                     pickerIsShow:false
                 },
                 color:{

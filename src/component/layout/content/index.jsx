@@ -24,7 +24,7 @@ function Content() {
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
-        }),
+        }), 
     })
     //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
@@ -73,8 +73,9 @@ function Content() {
     const childDragBack = (parentId, item, y, x) => {
         if (item.isHave) {
             let resultSheet = findNode(item.id, treeData).styleSheet;
+            let resultxy=getLastCeilXy(parentId,treeData,2);
             resultSheet.marginTop = y;
-            resultSheet.marginLeft = x;
+            resultSheet.marginLeft = x-resultxy.x-resultxy.width;
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
             //查询已经存在的X Y 偏量
@@ -98,6 +99,7 @@ function Content() {
                 node = UseTool.DivTwo;
                 styleSheet.width = localItem.styleAttr.width.value;
                 styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.backgroundColor=localItem.styleAttr.backgroundColor.value;
                 styleSheet.marginTop = top;
                 styleSheet.marginLeft = left;
                 break;
@@ -207,6 +209,7 @@ function Content() {
     const localEditComponent = (item) => {
         setLocalDomId(item.id);
         let styleSheet = findNode(item.id, treeData).styleSheet;
+        console.log(styleSheet);
         let tempSheet = [];
         for (let i in item.styleAttr) {
             tempSheet.push({

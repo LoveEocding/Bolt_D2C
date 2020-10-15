@@ -52,7 +52,8 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
             border: localDomId === id ? '3px dotted red' : '',
             ...styleSheet
         }}  >
-        <div ref={drop} style={{ display:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}>
+        <div ref={drop} style={{ display:'inherit',alignItems: 'inherit',
+        justifyContent:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}>
         {treeRender(childNodeList)}
         </div>
     </div>

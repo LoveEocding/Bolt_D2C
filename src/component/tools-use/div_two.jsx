@@ -18,7 +18,7 @@ function DivUseTwo({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
             border:localDomId===id?'1px dotted red':'',
             ...styleSheet
         }}  >
-        物理元素
+        
         </div>
 
 }
