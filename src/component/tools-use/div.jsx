@@ -14,7 +14,7 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
     })
     //设置可以被存放
     const [{ isOver }, drop] = useDrop({
-        accept: ['UseTool.DivTwo', 'UseTool.FloatTwo','UseComponent.DivTwo'],
+        accept: ['UseTool.DivTwo', 'UseTool.FloatTwo','UseComponent.FloatTwo','UseComponent.DivTwo'],
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),

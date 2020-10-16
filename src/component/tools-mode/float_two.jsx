@@ -8,6 +8,7 @@ function FloatTwoComponent() {
         item: {
             type: 'UseTool.FloatTwo',
             id: 'float-origin',
+            tag:'float', //针对真实标签
             isHave:false,
             dataAttr: [{
                 lable: '图片链接',
@@ -18,11 +19,11 @@ function FloatTwoComponent() {
                 width: {
                     lable: '宽',
                     type: 'text',
-                    value: '20px'
+                    value: 20
                 }, height: {
                     lable: '高',
                     type: 'text',
-                    value: '20px'
+                    value: 20
                 }, display: {
                     lable: '盒类型',
                     type: 'select',
@@ -73,7 +74,7 @@ function FloatTwoComponent() {
                 color:{
                     lable:'字体颜色',
                     type:'color',
-                    value:'#FFFFFF',
+                    value:'#f5e8bd',
                     pickerIsShow:false,
                 }
             },

@@ -8,6 +8,7 @@ function DivComponent() {
         item: {
             type: 'UseTool.Div',
             id: 'div-origin',
+            tag:'div',
             isHave:false,
             dataAttr: [{
                 lable: '图片链接',

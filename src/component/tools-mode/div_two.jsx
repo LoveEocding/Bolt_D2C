@@ -8,6 +8,7 @@ function DivTwoComponent() {
         item: {
             type: 'UseTool.DivTwo',
             id: 'div-origin',
+            tag:'div',
             isHave:false,
             dataAttr: [{
                 lable: '图片链接',

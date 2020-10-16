@@ -20,23 +20,60 @@ function Content() {
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
     const [{ isOver }, drop] = useDrop({
-        accept: ['UseTool.Div', 'UseComponent.Div'],
+        accept: ['UseTool.Div', 'UseComponent.Div', 'UseTool.Float', 'UseComponent.Float'],
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
-        }), 
+        }),
     })
     //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
         let [originY, originX] = [phoneNode.offsetTop, phoneNode.offsetLeft]
+        if (item.type === 'UseTool.Float' || item.type === 'UseComponent.Float') {
+            floatCeilCeilAddOrInsert(item, x, y, originX, originY);
+        } else {
+            containerCeilAddOrInsert(item, x, y, originX, originY);
+        }
+
+    }
+    //一级组件添加一个子结点
+    const childDragBack = (parentId, item, y, x) => {
+
+        if (item.tag==='float') {
+            if (item.isHave) {
+                let resultSheet = findNode(item.id, treeData).styleSheet;
+                resultSheet.top = y;
+                resultSheet.left = x;
+                console.log(resultSheet);
+                insertNodeStyle(item.id, treeData, resultSheet);
+            } else {
+                treeAdd(parentId, item, y, x);
+            }
+        } else {
+            if (item.isHave) {
+                let resultSheet = findNode(item.id, treeData).styleSheet;
+                let resultxy = getLastCeilXy(parentId, treeData, 2);
+                resultSheet.marginTop = y;
+                resultSheet.marginLeft = x - resultxy.x - resultxy.width;
+                insertNodeStyle(item.id, treeData, resultSheet);
+            } else {
+                //查询已经存在的X Y 偏量
+                let resultxy = getLastCeilXy(parentId, treeData, 1);
+                treeAdd(parentId, item, y, x - resultxy.x - resultxy.width);
+            }
+        }
+
+
+    }
+    //物理元素添加或者插入
+    const containerCeilAddOrInsert = (item, x, y, originX, originY) => {
         if (item.isHave) {
             //计算已经有的物理高度
             let resxy = getLastCeilXy(null, treeData, 2);
-            console.log(y, originY, resxy.height + resxy.y);
             let resultSheet = findNode(item.id, treeData).styleSheet;
-            resultSheet.marginTop = y - originY - resxy.height-resxy.y;
+            resultSheet.marginTop = y - originY - resxy.height - resxy.y;
             resultSheet.marginLeft = x - originX;
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
@@ -46,42 +83,45 @@ function Content() {
         let resxy = getLastCeilXy(null, treeData, 1);
         setTreeHeight(resxy.height + resxy.y);
     }
+    //浮动元素添加或者插入
+    const floatCeilCeilAddOrInsert = (item, x, y, originX, originY) => {
+        if (item.isHave) {
+            let resultSheet = findNode(item.id, treeData).styleSheet;
+            resultSheet.top = y - originY;
+            resultSheet.left = x - originX;
+            insertNodeStyle(item.id, treeData, resultSheet);
+        } else {
+            treeAdd(null, item, y - originY, x - originX);
+        }
+    }
     //获取末尾元素的offsetX offsetY number 1不存在查询末尾元素 2存在查询倒数第二个元素
     const getLastCeilXy = (parentId, tree, number) => {
         let resultNode = null;
-        let id=null;
+        let id = null;
         if (parentId) {
-            let parentNode=findNode(parentId, tree);
-            if(parentNode.childNode.length===0){
-                resultNode=parentNode;
-                id=resultNode.id; 
-                return { x:0, y:0, height:0,width:0 }; 
-            }else{
-                resultNode=parentNode.childNode;
-                id=resultNode[resultNode.length - number].id;
-            }     
+            let parentNode = findNode(parentId, tree);
+            id=findConceilById(parentNode.childNode);
         } else {
             resultNode = tree;
-            id=resultNode[resultNode.length - number].id;
+            id=findConceilById(tree);
+        }
+        if(!id){
+            return { x: 0, y: 0, height: 0, width: 0 };
         }
         let findDocumentNode = document.getElementById(id);
-        let [x, y, height,width] = [findDocumentNode.offsetLeft, findDocumentNode.offsetTop, findDocumentNode.offsetHeight,findDocumentNode.offsetWidth];
-        console.log(x,y,height,width);
-        return { x, y, height,width };
+        let [x, y, height, width] = [findDocumentNode.offsetLeft, findDocumentNode.offsetTop, findDocumentNode.offsetHeight, findDocumentNode.offsetWidth];
+        console.log(x, y, height, width);
+        return { x, y, height, width };
     }
-    //一级组件添加一个子结点
-    const childDragBack = (parentId, item, y, x) => {
-        if (item.isHave) {
-            let resultSheet = findNode(item.id, treeData).styleSheet;
-            let resultxy=getLastCeilXy(parentId,treeData,2);
-            resultSheet.marginTop = y;
-            resultSheet.marginLeft = x-resultxy.x-resultxy.width;
-            insertNodeStyle(item.id, treeData, resultSheet);
-        } else {
-            //查询已经存在的X Y 偏量
-            let resultxy=getLastCeilXy(parentId,treeData,1);
-            treeAdd(parentId, item, y, x-resultxy.x-resultxy.width);
-        }
+    //获取末尾第一个物理单元ID 浮动元素不占真实空间
+    const findConceilById=(tree)=>{
+         
+         for(let i=tree.length-1;i>=0;i--){
+             if(tree[i].tag==='div'){
+                 return tree[i].id;
+             }
+         }
+         return null;
     }
     //往状态树插入一个div 接受一个上级节点
     const treeAdd = (parentId, localItem, top, left) => {
@@ -92,27 +132,38 @@ function Content() {
             case 'UseTool.Div':
                 node = UseTool.Div;
                 styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.backgroundColor=localItem.styleAttr.backgroundColor.value;
+                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
                 styleSheet.flexDirection = 'row';
                 break;
             case 'UseTool.DivTwo':
                 node = UseTool.DivTwo;
                 styleSheet.width = localItem.styleAttr.width.value;
                 styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.backgroundColor=localItem.styleAttr.backgroundColor.value;
+                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
                 styleSheet.marginTop = top;
                 styleSheet.marginLeft = left;
                 break;
             case 'UseTool.Float':
+                styleSheet.width = localItem.styleAttr.width.value;
+                styleSheet.height = localItem.styleAttr.height.value;
                 styleSheet.position = 'absolute';
                 styleSheet.top = top;
                 styleSheet.left = left;
+                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
                 node = UseTool.Float;
                 break;
-
+            case 'UseTool.FloatTwo':
+                styleSheet.width = localItem.styleAttr.width.value;
+                styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.position = 'absolute';
+                styleSheet.top = top;
+                styleSheet.left = left;
+                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+                node = UseTool.FloatTwo;
+                break;
             default:
         }
-        let item = { name: node, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
+        let item = { name: node,tag:localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
         //如果父亲节点id 执行插入子树操作
         if (parentId) {
             insertChildNode(parentId, treeData, item);
@@ -121,6 +172,14 @@ function Content() {
         }
         setTreeData([].concat(treeData));
 
+    }
+    //复制模板属性给与正在添加的tree
+    const copyAttr=(item,top,left)=>{
+        let styleSheet = {};
+        for(let i in item.styleAttr){
+            styleSheet[i]=item.styleAttr[i].value;
+        }
+        console.log(styleSheet);
     }
     //快速给某个节点添加一个子节点
     const insertChildNode = (id, tree, childNode) => {
