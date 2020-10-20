@@ -26,6 +26,54 @@ function Content() {
             isOver: !!monitor.isOver(),
         }),
     })
+    
+    //声明周期监听键盘事件
+    useEffect(() => {
+        console.log(currentStyle);
+        let styleSheet = {};
+        for (let i in currentStyle) {
+            styleSheet[currentStyle[i].mean] = currentStyle[i].value;
+        }
+        document.addEventListener('keydown', (e)=>handleKeyDown(e,styleSheet));
+        console.log('又执行了一次');
+     },[currentStyle]);
+    //鼠标监听函数
+    const handleKeyDown = (e,styleSheet) => {
+        switch (e.code) {
+            case 'ArrowRight':
+                arrowDir('ArrowRight',styleSheet);
+                break;
+            case 'ArrowLeft':
+                arrowDir('ArrowLeft',styleSheet);
+                break;
+            case 'ArrowUp':
+                arrowDir('ArrowUp',styleSheet);
+                break;
+            case 'ArrowDown':
+                arrowDir('ArrowDown',styleSheet);
+                break;
+            case 'Delete':
+                break;
+        }
+    };
+    //上下左右调节间距
+    const arrowDir = (dir,styleSheet) => {
+        switch (dir) {
+            case 'ArrowLeft':
+                styleSheet.left--; 
+                break;
+            case 'ArrowRight': 
+                styleSheet.left++;
+                break;
+            case 'ArrowUp':
+                styleSheet.top--;
+                break;
+            case 'ArrowDown':
+                styleSheet.top++;
+                break;
+        }
+        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
+    }
     //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
         let phoneNode = document.getElementById('phone_canvas');
@@ -216,7 +264,6 @@ function Content() {
     }
     //快速给某个节点插入样式
     const insertNodeStyle = (id, tree, styleSheet) => {
-        console.log(tree, id);
         if (tree.length === 0) {
             return tree;
         }
