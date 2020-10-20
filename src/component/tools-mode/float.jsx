@@ -1,14 +1,17 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { useDrag } from 'react-dnd'
-
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
 function FloatComponent() {
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag,preview] = useDrag({
         item: {
             type: 'UseTool.Float',
             id: 'float-origin',
+            tag:'float', //针对真实标签
             isHave:false,
+            width:38,
+            height:38,
             dataAttr: [{
                 lable: '图片链接',
                 type: 'text',
@@ -18,11 +21,11 @@ function FloatComponent() {
                 width: {
                     lable: '宽',
                     type: 'text',
-                    value: '20px'
+                    value: 38
                 }, height: {
                     lable: '高',
                     type: 'text',
-                    value: '20px'
+                    value:38
                 }, display: {
                     lable: '盒类型',
                     type: 'select',
@@ -67,14 +70,19 @@ function FloatComponent() {
                 backgroundColor:{
                     lable:'背景颜色',
                     type:'color',
-                    value:'#FFFFFF',
+                    value:'#73aee0',
                     pickerIsShow:false
                 },
                 color:{
                     lable:'字体颜色',
                     type:'color',
-                    value:'#FFFFFF',
+                    value:'#73aee0',
                     pickerIsShow:false,
+                },
+                zIndex:{
+                    lable:'图层层级',
+                    type:'text',
+                    value:2, 
                 }
             },
             collect: monitor => ({
@@ -82,6 +90,9 @@ function FloatComponent() {
             }),
         }
     })
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    },[]);
     return <div id="img-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,

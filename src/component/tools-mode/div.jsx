@@ -1,10 +1,11 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import { useDrag } from 'react-dnd'
-
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
 function DivComponent() {
-    const [{ isDragging }, drag] = useDrag({
+    
+    const [{ isDragging }, drag,preview] = useDrag({
         item: {
             type: 'UseTool.Div',
             id: 'div-origin',
@@ -80,6 +81,9 @@ function DivComponent() {
             }),
         }
     })
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    },[]);
     return <div id="img-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,

@@ -1,15 +1,17 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useDrag } from 'react-dnd'
-
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
 function FloatTwoComponent() {
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag,preview] = useDrag({
         item: {
             type: 'UseTool.FloatTwo',
             id: 'float-origin',
             tag:'float', //针对真实标签
             isHave:false,
+            width:20,
+            height:20,
             dataAttr: [{
                 lable: '图片链接',
                 type: 'text',
@@ -83,6 +85,9 @@ function FloatTwoComponent() {
             }),
         }
     })
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    },[]);
     return <div id="img-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,

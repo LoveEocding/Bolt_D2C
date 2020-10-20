@@ -41,7 +41,7 @@ function Content() {
     //一级组件添加一个子结点
     const childDragBack = (parentId, item, y, x) => {
 
-        if (item.tag==='float') {
+        if (item.tag === 'float') {
             if (item.isHave) {
                 let resultSheet = findNode(item.id, treeData).styleSheet;
                 resultSheet.top = y;
@@ -54,13 +54,14 @@ function Content() {
         } else {
             if (item.isHave) {
                 let resultSheet = findNode(item.id, treeData).styleSheet;
-                let resultxy = getLastCeilXy(parentId, treeData, 2);
+                let resultxy = getLastCeilXy(parentId, treeData, item.id, item.isHave);
                 resultSheet.marginTop = y;
                 resultSheet.marginLeft = x - resultxy.x - resultxy.width;
                 insertNodeStyle(item.id, treeData, resultSheet);
             } else {
                 //查询已经存在的X Y 偏量
-                let resultxy = getLastCeilXy(parentId, treeData, 1);
+                let resultxy = getLastCeilXy(parentId, treeData, item.id, item.isHave);
+                console.log(resultxy);
                 treeAdd(parentId, item, y, x - resultxy.x - resultxy.width);
             }
         }
@@ -71,7 +72,7 @@ function Content() {
     const containerCeilAddOrInsert = (item, x, y, originX, originY) => {
         if (item.isHave) {
             //计算已经有的物理高度
-            let resxy = getLastCeilXy(null, treeData, 2);
+            let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);
             let resultSheet = findNode(item.id, treeData).styleSheet;
             resultSheet.marginTop = y - originY - resxy.height - resxy.y;
             resultSheet.marginLeft = x - originX;
@@ -80,7 +81,7 @@ function Content() {
             treeAdd(null, item, y - originY - treeHeight, x - originX);
         }
         //计算已经有的物理高度
-        let resxy = getLastCeilXy(null, treeData, 1);
+        let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);
         setTreeHeight(resxy.height + resxy.y);
     }
     //浮动元素添加或者插入
@@ -94,18 +95,19 @@ function Content() {
             treeAdd(null, item, y - originY, x - originX);
         }
     }
-    //获取末尾元素的offsetX offsetY number 1不存在查询末尾元素 2存在查询倒数第二个元素
-    const getLastCeilXy = (parentId, tree, number) => {
+    //获取末尾元素的offsetX offsetY
+    const getLastCeilXy = (parentId, tree, chooseId, isHave) => {
         let resultNode = null;
         let id = null;
         if (parentId) {
             let parentNode = findNode(parentId, tree);
-            id=findConceilById(parentNode.childNode);
+            id = findConceilById(parentNode.childNode, chooseId, isHave);
         } else {
             resultNode = tree;
-            id=findConceilById(tree);
+            id = findConceilById(tree, chooseId, isHave);
         }
-        if(!id){
+
+        if (!id) {
             return { x: 0, y: 0, height: 0, width: 0 };
         }
         let findDocumentNode = document.getElementById(id);
@@ -113,15 +115,27 @@ function Content() {
         console.log(x, y, height, width);
         return { x, y, height, width };
     }
-    //获取末尾第一个物理单元ID 浮动元素不占真实空间
-    const findConceilById=(tree)=>{
-         
-         for(let i=tree.length-1;i>=0;i--){
-             if(tree[i].tag==='div'){
-                 return tree[i].id;
-             }
-         }
-         return null;
+    //获取选中元素前面的第一个物理元素
+    const findConceilById = (tree, id, isHave) => {
+        //如果是新增
+        if (isHave) {
+            for (let i = tree.length - 1; i >= 0; i--) {
+                if (tree[i].id === id) {
+                    for (let j = i - 1; j >= 0; j--) {
+                        if (tree[j].tag === 'div') {
+                            return tree[j].id;
+                        }
+                    }
+                }
+            }
+        } else {
+            for (let i = tree.length - 1; i >= 0; i--) {
+                if (tree[i].tag === 'div') {
+                    return tree[i].id;
+                }
+            }
+        }
+        return null;
     }
     //往状态树插入一个div 接受一个上级节点
     const treeAdd = (parentId, localItem, top, left) => {
@@ -163,7 +177,7 @@ function Content() {
                 break;
             default:
         }
-        let item = { name: node,tag:localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
+        let item = { name: node, tag: localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
         //如果父亲节点id 执行插入子树操作
         if (parentId) {
             insertChildNode(parentId, treeData, item);
@@ -174,10 +188,10 @@ function Content() {
 
     }
     //复制模板属性给与正在添加的tree
-    const copyAttr=(item,top,left)=>{
+    const copyAttr = (item, top, left) => {
         let styleSheet = {};
-        for(let i in item.styleAttr){
-            styleSheet[i]=item.styleAttr[i].value;
+        for (let i in item.styleAttr) {
+            styleSheet[i] = item.styleAttr[i].value;
         }
         console.log(styleSheet);
     }

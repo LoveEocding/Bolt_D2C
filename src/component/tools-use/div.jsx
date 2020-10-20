@@ -1,17 +1,20 @@
-import React ,{ useState } from 'react';
-import { useDrag, useDrop } from 'react-dnd'
+import React ,{ useState,useEffect } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 import UseTool from '../tools-use/index.js'; //引入真实使用的组件
-
-
+import './div.scss';
 function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, localDomId, dragCallBack, childNodeList }) {
     //设置可以被拖拽
-    const [{ isDragging }, drag] = useDrag({
-        item: { type: 'UseComponent.Div', id: id, isHave: true },
+    const [{ isDragging }, drag,preview] = useDrag({
+        item: { type: 'UseComponent.Div', id: id, isHave: true,width:styleSheet.width,height:styleSheet.height },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),
     })
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    },[]);
     //设置可以被存放
     const [{ isOver }, drop] = useDrop({
         accept: ['UseTool.DivTwo', 'UseTool.FloatTwo','UseComponent.FloatTwo','UseComponent.DivTwo'],
@@ -44,19 +47,27 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
         e.preventDefault();
         console.log('右键点击');
     }
-    return <div id={id} key={id} ref={drag} onContextMenu={(e)=>rightMenuClick(e)}  onClick={callback.bind(this, { styleSheet, dataAttr, styleAttr, id })}
+    return<>
+     <div className="use-div" id={id} key={id} ref={drag} onContextMenu={(e)=>rightMenuClick(e)}  onClick={callback.bind(this, { styleSheet, dataAttr, styleAttr, id })}
         style={{
             opacity: isDragging ? 0 : 1,
             cursor: 'move',
             display: 'flex',
-            border: localDomId === id ? '3px dotted red' : '',
-            ...styleSheet
+            position:'relative',
+            border: localDomId === id ? '2px solid red' : '',
+            ...styleSheet,
+            marginLeft:0
         }}  >
+        {/* 上线差距 */}
+        <div className='top-line'  style={{  position:'absolute',left:'50%',top:-1*styleSheet.marginTop,height:styleSheet.marginTop,width:1,border:'1px solid red'}}>
+            <div style={{ position:'absolute',top:'50%',left:3 }}>{ styleSheet.marginTop+'px' }</div> 
+        </div>
         <div ref={drop} style={{ display:'inherit',alignItems: 'inherit',
         justifyContent:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}>
         {treeRender(childNodeList)}
         </div>
     </div>
+    </>
 
 }
 

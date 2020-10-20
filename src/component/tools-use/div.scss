@@ -1,0 +1,49 @@
+.use-div{
+    .top-line{
+        display: none;
+    }
+    .div-preview{
+        display: none;
+    }
+}
+.use-div:hover{
+    //border:3px dotted #079bbc ;
+    .top-line{
+        display: block;
+
+    }
+    .div-preview{
+        display: block;
+    }
+
+}
+.use-div2{
+    .line{
+        display: none;
+    }
+}
+.use-div2:hover{
+    .line{
+        display: block;
+    }
+}
+.use-float{
+    .line{
+        display: none;
+    }
+}
+.use-float:hover{
+    .line{
+        display: block;
+    }
+}
+.use-float2{
+    .line{
+        display:none;
+    }
+}
+.use-float2:hover{
+    .line{
+        display: block;
+    }
+}

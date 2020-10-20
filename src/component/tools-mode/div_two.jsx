@@ -1,10 +1,9 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useDrag } from 'react-dnd'
-
-
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 function DivTwoComponent() {
-    const [{ isDragging }, drag] = useDrag({
+    const [{ isDragging }, drag,preview] = useDrag({
         item: {
             type: 'UseTool.DivTwo',
             id: 'div-origin',
@@ -15,16 +14,18 @@ function DivTwoComponent() {
                 type: 'text',
                 value: ''
             }],
+            width:25,
+            height:25,
             styleAttr: {
                 width:{
                    lable:'宽',
                    type:'text',
-                   value:60
+                   value:25
                 },
                 height: {
                     lable: '高',
                     type: 'text',
-                    value:60
+                    value:25
                 },
                 flexDirection:{
                     lable: '设置主轴方向',
@@ -90,6 +91,9 @@ function DivTwoComponent() {
             }),
         }
     })
+    useEffect(() => {
+        preview(getEmptyImage(), { captureDraggingState: true });
+    },[]);
     return <div id="img-origin" ref={drag}
         style={{
             // opacity: isDragging ? 0.5 : 1,
