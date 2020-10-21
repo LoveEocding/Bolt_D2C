@@ -56,6 +56,8 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
             position:'relative',
             border: localDomId === id ? '2px solid red' : '',
             ...styleSheet,
+            backgroundImage:`url(${styleSheet.backgroundImage})`,
+            backgroundSize:'100% 100%',
             marginLeft:0
         }}  >
         {/* 上线差距 */}
@@ -63,7 +65,8 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
             <div style={{ position:'absolute',top:'50%',left:3 }}>{ styleSheet.marginTop+'px' }</div> 
         </div>
         <div ref={drop} style={{ display:'inherit',alignItems: 'inherit',
-        justifyContent:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}>
+        justifyContent:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}> 
+        {dataAttr.text.value}
         {treeRender(childNodeList)}
         </div>
     </div>

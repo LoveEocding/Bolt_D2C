@@ -17,10 +17,10 @@ function Content() {
     const [phoneIndex, setPhoneIndex] = useState(0);
     //设置样式属性 数组
     const [currentStyle, setCurrentStyle] = useState([]);
-    //当前编辑样式 对象
-    const [localSheet, setLocalSheet] = useState({});
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
+    //声明功能属性
+    const [extralAttr, setExtralAttr] = useState({});
     const [{ isOver }, drop] = useDrop({
         accept: ['UseTool.Div', 'UseComponent.Div', 'UseTool.Float', 'UseComponent.Float'],
         drop: (item, monitor) => dragEnd(item, monitor),
@@ -42,26 +42,26 @@ function Content() {
         for (let i in currentStyle) {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
-        window.styleSheet=styleSheet;
-        window.localDomId=localDomId;
-        window.treeData=treeData;
-    }, [currentStyle],localDomId,treeData)
+        window.styleSheet = styleSheet;
+        window.localDomId = localDomId;
+        window.treeData = treeData;
+    }, [currentStyle], localDomId, treeData)
     //鼠标监听函数
     const handleKeyDown = (e) => {
-        let styleSheet=window.styleSheet;
-        let id=window.localDomId;
+        let styleSheet = window.styleSheet;
+        let id = window.localDomId;
         switch (e.code) {
             case 'ArrowRight':
-                arrowDir('ArrowRight',id ,styleSheet);
+                arrowDir('ArrowRight', id, styleSheet);
                 break;
             case 'ArrowLeft':
-                arrowDir('ArrowLeft',id, styleSheet);
+                arrowDir('ArrowLeft', id, styleSheet);
                 break;
             case 'ArrowUp':
-                arrowDir('ArrowUp',id, styleSheet);
+                arrowDir('ArrowUp', id, styleSheet);
                 break;
             case 'ArrowDown':
-                arrowDir('ArrowDown',id, styleSheet);
+                arrowDir('ArrowDown', id, styleSheet);
                 break;
             case 'Delete':
                 deleteNode(id, window.treeData);
@@ -69,7 +69,7 @@ function Content() {
         }
     };
     //上下左右调节间距
-    const arrowDir = (dir, id,styleSheet) => {
+    const arrowDir = (dir, id, styleSheet) => {
         switch (dir) {
             case 'ArrowLeft':
                 styleSheet.left--;
@@ -242,7 +242,7 @@ function Content() {
                 break;
             default:
         }
-        let item = { name: node, tag: localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
+        let item = { name: node, tag: localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet,childNode: [] };
         //如果父亲节点id 执行插入子树操作
         if (parentId) {
             insertChildNode(parentId, treeData, item);
@@ -281,7 +281,7 @@ function Content() {
     }
     //快速给某个节点插入样式
     const insertNodeStyle = (id, tree, styleSheet) => {
-        console.log(id,tree,styleSheet);
+        console.log(id, tree, styleSheet);
         if (tree.length === 0) {
             return tree;
         }
@@ -291,6 +291,22 @@ function Content() {
                 break all;
             } else {
                 tree[i].childNode = insertNodeStyle(id, tree[i].childNode, styleSheet);
+            }
+        }
+        return tree;
+    }
+    //快速给某节点插入额外属性
+    const insertNodeExtralData = (id, tree, extralData) => {
+        console.log(id, tree, extralData);
+        if (tree.length === 0) {
+            return tree;
+        }
+        all: for (let i = 0; i < tree.length; i++) {
+            if (tree[i].id === id) {
+                tree[i].dataAttr = extralData;
+                break all;
+            } else {
+                tree[i].childNode = insertNodeExtralData(id, tree[i].childNode, extralData);
             }
         }
         return tree;
@@ -349,6 +365,7 @@ function Content() {
         let styleSheet = findNode(item.id, treeData).styleSheet;
         console.log(styleSheet);
         let tempSheet = [];
+        //本地样式赋值
         for (let i in item.styleAttr) {
             tempSheet.push({
                 mean: i,
@@ -358,7 +375,13 @@ function Content() {
                 select: item.styleAttr[i].select
             })
         }
-        console.log(tempSheet);
+        //其他属性赋值
+        let tempExtralData={};
+        for(let i in item.dataAttr){
+            tempExtralData[i]={...item.dataAttr[i]};
+        }
+        setExtralAttr(tempExtralData);
+        console.log(extralAttr);
         setCurrentStyle([].concat(tempSheet));
     }
     //颜色改变 
@@ -396,13 +419,25 @@ function Content() {
     //编辑当前样式输入框
     const styleChange = (event, mean) => {
         let styleSheet = {};
+        let isNumber=/^[0-9]+$/i;
         for (let i in currentStyle) {
             if (currentStyle[i].mean === mean) {
-                currentStyle[i].value = Number(event.target.value)
+                currentStyle[i].value =  isNumber.test(event.target.value)?Number(event.target.value):event.target.value;
             }
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
+        console.log(styleSheet);
         setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
+    }
+    //额外属下输入框
+    const extralChange= (event, mean) => {
+
+        for (let i in extralAttr) {
+            if (i === mean) {
+                extralAttr[i].value = event.target.value
+            }
+        }
+        setTreeData([].concat(insertNodeExtralData(localDomId, treeData, extralAttr)));
     }
     //编辑当前样式选择框
     const selectChange = (mean, value) => {
@@ -418,6 +453,7 @@ function Content() {
         setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
 
     }
+    //返回额外属性的样式表
     return <div className="content" id="content">
         <div className="console">
             <div className="btn">上一页</div>
@@ -435,16 +471,15 @@ function Content() {
         <div className="content_panel">
             {/* 功能属性*/}
             <div className="panel_attributes" style={{ marginLeft: 'inherit' }}>
-
                 <div className="panel_head" >功能属性</div>
-                <div className="describe">
-                    <div className="lable">操作：</div>
-                    <div className="action" onClick={() => deleteNode(localDomId, treeData)}>删除节点</div>
-                </div>
-                <div className="describe">
-                    <div className="lable">图片链接：</div>
-                    <div className="value"><input /></div>
-                </div>
+                { Object.keys(extralAttr).map( key => 
+                       <>
+                        <div className="text-describe">
+                           <div className="lable">{extralAttr[key].lable}：</div>
+                            <div className="value"><textarea value={extralAttr[key].value} mean={key} onChange={(event) => extralChange(event, key)} /></div>
+                       </div>
+                       </>
+                )}
             </div>
 
             <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
