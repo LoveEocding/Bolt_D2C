@@ -17,6 +17,8 @@ function Content() {
     const [phoneIndex, setPhoneIndex] = useState(0);
     //设置样式属性 数组
     const [currentStyle, setCurrentStyle] = useState([]);
+    //当前编辑样式 对象
+    const [localSheet, setLocalSheet] = useState({});
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
     const [{ isOver }, drop] = useDrop({
@@ -26,53 +28,67 @@ function Content() {
             isOver: !!monitor.isOver(),
         }),
     })
-    
+
     //声明周期监听键盘事件
     useEffect(() => {
-        console.log(currentStyle);
+        document.addEventListener('keydown', handleKeyDown);
+        //清除监听事件
+        return function cleanListener() {
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    }, []);
+    useEffect(() => {
         let styleSheet = {};
         for (let i in currentStyle) {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
-        document.addEventListener('keydown', (e)=>handleKeyDown(e,styleSheet));
-        console.log('又执行了一次');
-     },[currentStyle]);
+        window.styleSheet=styleSheet;
+        window.localDomId=localDomId;
+        window.treeData=treeData;
+    }, [currentStyle],localDomId,treeData)
     //鼠标监听函数
-    const handleKeyDown = (e,styleSheet) => {
+    const handleKeyDown = (e) => {
+        let styleSheet=window.styleSheet;
+        let id=window.localDomId;
         switch (e.code) {
             case 'ArrowRight':
-                arrowDir('ArrowRight',styleSheet);
+                arrowDir('ArrowRight',id ,styleSheet);
                 break;
             case 'ArrowLeft':
-                arrowDir('ArrowLeft',styleSheet);
+                arrowDir('ArrowLeft',id, styleSheet);
                 break;
             case 'ArrowUp':
-                arrowDir('ArrowUp',styleSheet);
+                arrowDir('ArrowUp',id, styleSheet);
                 break;
             case 'ArrowDown':
-                arrowDir('ArrowDown',styleSheet);
+                arrowDir('ArrowDown',id, styleSheet);
                 break;
             case 'Delete':
+                deleteNode(id, window.treeData);
                 break;
         }
     };
     //上下左右调节间距
-    const arrowDir = (dir,styleSheet) => {
+    const arrowDir = (dir, id,styleSheet) => {
         switch (dir) {
             case 'ArrowLeft':
-                styleSheet.left--; 
+                styleSheet.left--;
+                styleSheet.marginLeft--;
                 break;
-            case 'ArrowRight': 
+            case 'ArrowRight':
                 styleSheet.left++;
+                styleSheet.marginLeft++;
                 break;
             case 'ArrowUp':
                 styleSheet.top--;
+                styleSheet.marginTop--;
                 break;
             case 'ArrowDown':
                 styleSheet.top++;
+                styleSheet.marginTop++;
                 break;
         }
-        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
+        setTreeData([].concat(insertNodeStyle(id, window.treeData, styleSheet)));
     }
     //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
@@ -193,6 +209,7 @@ function Content() {
         switch (localItem.type) {
             case 'UseTool.Div':
                 node = UseTool.Div;
+                styleSheet.marginTop = top;
                 styleSheet.height = localItem.styleAttr.height.value;
                 styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
                 styleSheet.flexDirection = 'row';
@@ -264,6 +281,7 @@ function Content() {
     }
     //快速给某个节点插入样式
     const insertNodeStyle = (id, tree, styleSheet) => {
+        console.log(id,tree,styleSheet);
         if (tree.length === 0) {
             return tree;
         }
@@ -429,7 +447,7 @@ function Content() {
                 </div>
             </div>
 
-            <div className="phone_canvas" id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+            <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {treeRender(treeData)}
             </div>
 

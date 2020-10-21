@@ -27,7 +27,7 @@ function DivUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
          </div>
          {/* 左线差距 */}
          <div className='line'  style={{  position:'absolute',top:'50%',left:-1*styleSheet.left,width:styleSheet.left,height:1,border:'1px solid red'}}>
-            <div style={{ position:'absolute',left:'50%',top:3 }}>{ styleSheet.top+'px' }</div> 
+            <div style={{ position:'absolute',left:'50%',top:3 }}>{ styleSheet.left+'px' }</div> 
          </div> 
         </div>
 
