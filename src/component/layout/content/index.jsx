@@ -352,6 +352,27 @@ function Content() {
         let result = lunFind(id, tree);
         setTreeData([].concat(result));
     }
+    //快速复制某个节点到对应的父亲节点
+    const copyNode=(id,tree)=>{
+        const lunFind = (id, tree) => {
+            //依次遍历兄弟结点
+            for (let i = 0; i < tree.length; i++) {
+                if (tree[i].id === id) {
+                    let temp={...tree[i]};
+                    temp.id=makeOnlyId();
+                    tree.push(temp);
+                    return tree;
+                }
+            }
+            //接着遍历子结点
+            for (let i = 0; i < tree.length; i++) {
+                tree[i].childNode = lunFind(id, tree[i].childNode);
+            }
+            return tree;
+        };
+        let result = lunFind(id, tree);
+        setTreeData([].concat(result));
+    }
     //调节节点顺序
     const changeSort=(tree,id,action)=>{
         for(let i in tree){
@@ -501,8 +522,9 @@ function Content() {
             </div>
             {/* 操作 */}
             <div className="panel_action">
-                <div className='up item' onClick={()=>changeSort(treeData,localDomId,'up')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg></div>
-                <div className='down item' onClick={()=>changeSort(treeData,localDomId,'down')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg></div>
+                <div className='item' onClick={()=>changeSort(treeData,localDomId,'up')}><svg style={{ transform:'rotate(180deg)'  }} t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">上移</div></div>
+                <div className='item' onClick={()=>changeSort(treeData,localDomId,'down')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">下移</div></div>
+                <div className='item' onClick={()=>copyNode(localDomId,treeData)}><svg t="1603348645892" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4275" width="64" height="64"><path d="M832 448H444.8c-19.2 0-32-12.8-32-32s12.8-32 32-32H832c19.2 0 32 12.8 32 32s-12.8 32-32 32z" p-id="4276" fill="#e6e6e6"></path><path d="M640 643.2c-19.2 0-32-12.8-32-32V220.8c0-19.2 12.8-32 32-32s32 12.8 32 32v393.6c0 16-12.8 28.8-32 28.8zM704 1024H64c-35.2 0-64-28.8-64-64V320c0-35.2 28.8-64 64-64h96c19.2 0 32 12.8 32 32s-12.8 32-32 32H64v640h640v-96c0-19.2 12.8-32 32-32s32 12.8 32 32v96c0 35.2-28.8 64-64 64z" p-id="4277" fill="#e6e6e6"></path><path d="M960 768H320c-35.2 0-64-28.8-64-64V64c0-35.2 28.8-64 64-64h640c35.2 0 64 28.8 64 64v640c0 35.2-28.8 64-64 64zM320 64v640h640V64H320z" p-id="4278" fill="#e6e6e6"></path></svg><div className="action-lable">复制</div></div>
             </div>
             <div className='panel_phone'>
             <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
