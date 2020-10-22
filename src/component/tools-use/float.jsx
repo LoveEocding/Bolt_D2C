@@ -19,7 +19,9 @@ function DivUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
             opacity: isDragging ? 0 : 1,
             cursor: 'move',
             border:localDomId===id?'1px dotted red':'',
-            ...styleSheet
+            ...styleSheet,
+            backgroundImage:`url(${styleSheet.backgroundImage})`,
+            backgroundSize:'100% 100%',
         }}  >
           {/* 上线差距 */}
           <div  className="line"  style={{  position:'absolute',left:'50%',top:-1*styleSheet.top,height:styleSheet.top,width:1,border:'1px solid red'}}>
@@ -28,7 +30,8 @@ function DivUse({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
          {/* 左线差距 */}
          <div className='line'  style={{  position:'absolute',top:'50%',left:-1*styleSheet.left,width:styleSheet.left,height:1,border:'1px solid red'}}>
             <div style={{ position:'absolute',left:'50%',top:3 }}>{ styleSheet.left+'px' }</div> 
-         </div> 
+         </div>
+         {dataAttr.text.value} 
         </div>
 
 }

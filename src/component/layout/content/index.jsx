@@ -142,7 +142,8 @@ function Content() {
             resultSheet.marginLeft = x - originX;
             insertNodeStyle(item.id, treeData, resultSheet);
         } else {
-            treeAdd(null, item, y - originY - treeHeight, x - originX);
+            let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);
+            treeAdd(null, item, y - originY - resxy.height - resxy.y, x - originX);
         }
         //计算已经有的物理高度
         let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);

@@ -30,7 +30,6 @@ function DragLayerComponent(props) {
     currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging(),
   }));
-  console.log(item);
   let width=item&&item.width?item.width:375;
   let height=item&&item.height?item.height:60;
   return (<div style={layerStyles}>

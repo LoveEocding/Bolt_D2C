@@ -12,11 +12,11 @@ function FloatComponent() {
             isHave:false,
             width:38,
             height:38,
-            dataAttr: [{
-                lable: '图片链接',
+            dataAttr: {text:{
+                lable: '文本',
                 type: 'text',
                 value: ''
-            }],
+            }},
             styleAttr: {
                 width: {
                     lable: '宽',
@@ -83,6 +83,11 @@ function FloatComponent() {
                     lable:'图层层级',
                     type:'text',
                     value:2, 
+                },
+                backgroundImage:{
+                    lable:'背景图片',
+                    type:'text',
+                    value:''
                 }
             },
             collect: monitor => ({

@@ -21,7 +21,9 @@ function DivUseTwo({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
             display:'flex',
             position:'relative',
             border:localDomId===id?'1px dotted red':'',
-            ...styleSheet
+            ...styleSheet,
+            backgroundImage:`url(${styleSheet.backgroundImage})`,
+            backgroundSize:'100% 100%',
         }}>
          {/* 上线差距 */}
          <div  className="line"  style={{  position:'absolute',left:'50%',top:-1*styleSheet.marginTop,height:styleSheet.marginTop,width:1,border:'1px solid red'}}>
@@ -31,6 +33,7 @@ function DivUseTwo({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
          <div className='line'  style={{  position:'absolute',top:'50%',left:-1*styleSheet.marginLeft,width:styleSheet.marginLeft,height:1,border:'1px solid red'}}>
             <div style={{ position:'absolute',left:'50%',top:3 }}>{ styleSheet.marginTop+'px' }</div> 
          </div>
+         {dataAttr.text.value}
         </div>
 
 }

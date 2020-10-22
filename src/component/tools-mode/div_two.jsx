@@ -9,11 +9,13 @@ function DivTwoComponent() {
             id: 'div-origin',
             tag:'div',
             isHave:false,
-            dataAttr: [{
-                lable: '图片链接',
-                type: 'text',
-                value: ''
-            }],
+            dataAttr: {
+                text:{
+                 lable: '文本',
+                 type: 'text',
+                 value: ''
+                }
+            },
             width:25,
             height:25,
             styleAttr: {
@@ -84,6 +86,11 @@ function DivTwoComponent() {
                     type:'color',
                     value:'#FFFFFF',
                     pickerIsShow:false,
+                },
+                backgroundImage:{
+                    lable:'背景图片',
+                    type:'text',
+                    value:''
                 }
             },
             collect: monitor => ({

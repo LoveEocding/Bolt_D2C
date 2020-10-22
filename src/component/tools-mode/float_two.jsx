@@ -12,11 +12,11 @@ function FloatTwoComponent() {
             isHave:false,
             width:20,
             height:20,
-            dataAttr: [{
-                lable: '图片链接',
+            dataAttr: {text:{
+                lable: '文本',
                 type: 'text',
                 value: ''
-            }],
+            }},
             styleAttr: {
                 width: {
                     lable: '宽',
@@ -78,6 +78,11 @@ function FloatTwoComponent() {
                     type:'color',
                     value:'#f5e8bd',
                     pickerIsShow:false,
+                }, 
+                backgroundImage:{
+                    lable:'背景图片',
+                    type:'text',
+                    value:''
                 }
             },
             collect: monitor => ({
