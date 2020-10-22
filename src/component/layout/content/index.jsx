@@ -351,6 +351,23 @@ function Content() {
         let result = lunFind(id, tree);
         setTreeData([].concat(result));
     }
+    //调节节点顺序
+    const changeSort=(tree,id,action)=>{
+        for(let i in tree){
+            if(tree[i].id===id){
+                let temp=tree[i];
+                tree.splice(i,1);
+                if(action==='up'){
+                    tree.splice(i-1>=0?i-1:0,0,temp);
+                }else{
+                    tree.splice(i+1<=tree.length?i+1:tree.length,0,temp);
+                }
+                break;
+            }
+        }
+        console.log(tree);
+        setTreeData([].concat(tree));
+    }
     //状态树渲染
     const treeRender = (tree) => {
         if (tree.length === 0) {
@@ -481,9 +498,15 @@ function Content() {
                        </>
                 )}
             </div>
-
+            {/* 操作 */}
+            <div className="panel_action">
+                <div className='up item' onClick={()=>changeSort(treeData,localDomId,'up')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg></div>
+                <div className='down item' onClick={()=>changeSort(treeData,localDomId,'down')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg></div>
+            </div>
+            <div className='panel_phone'>
             <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {treeRender(treeData)}
+            </div>
             </div>
 
             {/* 属性面板 */}
