@@ -29,12 +29,14 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
         let [originY, originX] = [phoneNode.offsetTop + parentNode.offsetTop, phoneNode.offsetLeft + parentNode.offsetLeft];
-        console.log(x, y, originX, originY);
-        dragCallBack(id, item, y - originY, x - originX);
+         //还有Y轴的滚动的距离
+        let scrollY=phoneNode.scrollTop||phoneNode.pageYOffset||0;
+        console.log(x, y, originX, originY,scrollY);
+        dragCallBack(id, item, y - originY+scrollY, x - originX);
     }
     //渲染子节点
     const treeRender = (tree) => {
-        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>);
+        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} parentId={id} childNodeList={item.childNode} dragCallBack={dragCallBack} ></item.name>);
     }
     //点击编辑当前 
     const localEditComponent = (e,item) => {

@@ -237,6 +237,14 @@ function Content() {
                 styleSheet.marginTop = top;
                 styleSheet.marginLeft = left;
                 break;
+            case 'UseTool.DivThree':
+                node = UseTool.DivThree;
+                styleSheet.width = localItem.styleAttr.width.value;
+                styleSheet.height = localItem.styleAttr.height.value;
+                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+                styleSheet.marginTop = top;
+                styleSheet.marginLeft = left;
+                break;
             case 'UseTool.Float':
                 styleSheet.width = localItem.styleAttr.width.value;
                 styleSheet.height = localItem.styleAttr.height.value;
@@ -255,6 +263,7 @@ function Content() {
                 styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
                 node = UseTool.FloatTwo;
                 break;
+                
             default:
         }
         let item = { name: node, tag: localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
@@ -285,7 +294,7 @@ function Content() {
                 tree[i].childNode.push(childNode);
                 break all;
             } else {
-                tree[i].childNode = insertNodeStyle(id, tree[i].childNode, childNode);
+                tree[i].childNode = insertChildNode(id, tree[i].childNode, childNode);
             }
         }
         return tree;
@@ -611,7 +620,7 @@ function Content() {
                                         {item.value}
                                     </div>
                                 </Dropdown> : ''}
-                                {item.type === 'text' ? <div className="value" >  <InputNumber min={0} mean={item.mean} defaultValue={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
+                                {item.type === 'text' ? <div className="value" >  <InputNumber min={0} mean={item.mean}  value={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
 
                             </div>}
                     </>

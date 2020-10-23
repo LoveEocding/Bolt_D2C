@@ -6,6 +6,8 @@ import WheelCompontent from '../../tools-mode/wheel';
 //二级组件 存放于一级组件中
 import ToolDivTwo from '../../tools-mode/div_two';
 import ToolFloatTwo from '../../tools-mode/float_two';
+//三级组件 存放二级组件中
+import ToolDivThree from '../../tools-mode/div_three';
 function Tool() {
     return <div className="tool">
         <div className="base-conent">
@@ -20,6 +22,13 @@ function Tool() {
                二级组件
             </div>
             <ToolDivTwo></ToolDivTwo>
+            <ToolFloatTwo></ToolFloatTwo>
+        </div>
+        <div className="base-conent">
+            <div className="lable">
+               三级组件
+            </div>
+            <ToolDivThree></ToolDivThree>
             <ToolFloatTwo></ToolFloatTwo>
         </div>
         <div className="base-conent">
