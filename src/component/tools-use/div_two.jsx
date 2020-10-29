@@ -3,7 +3,7 @@ import { useDrag, useDrop } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import './div.scss';
 
-function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id, localDomId, dragCallBack, childNodeList }) {
+function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id,parentId,localDomId, dragCallBack, childNodeList }) {
     const [{ isDragging }, drag, preview] = useDrag({
         item: { type: 'UseComponent.DivTwo', id: id, isHave: true, width: styleSheet.width, height: styleSheet.height },
         collect: monitor => ({
@@ -15,7 +15,7 @@ function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id, 
     }, []);
     //设置可以被存放
     const [{ isOver }, drop] = useDrop({
-        accept: ['UseTool.DivThree', 'UseComponent.DivThree'],
+        accept: ['UseTool.DivThree','UseTool.FloatThree', 'UseComponent.DivThree','UseComponent.FloatThree'],
         drop: (item, monitor) => dragEnd(item, monitor),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
@@ -23,11 +23,11 @@ function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id, 
     })
     //拖拽完成函数
     const dragEnd = (item, monitor) => {
-        let parentNode = document.getElementById(id);
-        let phoneNode = document.getElementById('phone_canvas');
+        let parentNode = document.getElementById(id);//二级节点
+        let grandNode = document.getElementById(parentId);//一级节点
+        let phoneNode = document.getElementById('phone_canvas');//根节点
         let { x, y } = monitor.getSourceClientOffset();
-        let [originY, originX] = [phoneNode.offsetTop + parentNode.offsetTop, phoneNode.offsetLeft + parentNode.offsetLeft];
-        debugger
+        let [originY, originX] = [phoneNode.offsetTop + parentNode.offsetTop+grandNode.offsetTop, phoneNode.offsetLeft + parentNode.offsetLeft+grandNode.offsetLeft];
         //还有Y轴的滚动的距离
         let scrollY=phoneNode.scrollTop||phoneNode.pageYOffset||0;
         console.log(x, y, originX, originY,scrollY);

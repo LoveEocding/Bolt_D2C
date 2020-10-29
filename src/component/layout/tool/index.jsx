@@ -8,6 +8,7 @@ import ToolDivTwo from '../../tools-mode/div_two';
 import ToolFloatTwo from '../../tools-mode/float_two';
 //三级组件 存放二级组件中
 import ToolDivThree from '../../tools-mode/div_three';
+import ToolFloatThree from '../../tools-mode/float_three';
 function Tool() {
     return <div className="tool">
         <div className="base-conent">
@@ -29,7 +30,7 @@ function Tool() {
                三级组件
             </div>
             <ToolDivThree></ToolDivThree>
-            <ToolFloatTwo></ToolFloatTwo>
+            <ToolFloatThree></ToolFloatThree>
         </div>
         <div className="base-conent">
             <div className="lable">

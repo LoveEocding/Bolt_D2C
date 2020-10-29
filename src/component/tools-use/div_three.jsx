@@ -3,9 +3,9 @@ import { useDrag } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import './div.scss';
 
-function DivUseThree({ styleSheet, dataAttr, styleAttr, callback, id, parentId,localDomId }) {
+function DivUseThree({ styleSheet, dataAttr, styleAttr, callback, id,localDomId }) {
     const [{ isDragging }, drag, preview] = useDrag({
-        item: { type: 'UseComponent.DivTwo', id: id, isHave: true, width: styleSheet.width, height: styleSheet.height },
+        item: { type: 'UseComponent.DivThree', id: id, isHave: true, width: styleSheet.width, height: styleSheet.height },
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),

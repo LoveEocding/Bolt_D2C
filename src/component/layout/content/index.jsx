@@ -5,14 +5,39 @@ import PhoneList from '../../../phone.config.js'; //机型数据配置文件
 import { Menu, Dropdown, InputNumber, Modal, Input } from 'antd';
 import UseTool from '../../tools-use/index.js'; //引入真实使用的组件
 import { SketchPicker } from 'react-color';
+//根节点初始值
+const DomRoot={
+    name: 'APP', tag: 'div', dataAttr: {}, id: 'canvas_app', 
+    styleAttr: {
+         height: {
+             lable: '高',
+             type: 'text',
+             value:25
+         },
+         backgroundColor:{
+            lable:'背景颜色',
+            type:'color',
+            value:'#f5c1c1',
+            pickerIsShow:false
+        },
+        backgroundImage:{
+            lable:'背景图片',
+            type:'text',
+            value:''
+        }
+    }, styleSheet:{
+        width:'100%',
+        height:667
+    }, childNode: []
+}
 
 function Content() {
     //瀑布流已经有的高度
     const [treeHeight, setTreeHeight] = useState(0);
     //历史路由状态树
     const [routerData, setRouteData] = useState({});
-    //生成状态树
-    const [treeData, setTreeData] = useState([]);
+    //生成状态树 初始根元素
+    const [treeData, setTreeData] = useState({...DomRoot});
     // 声明一个叫 "count" 的 state 变量
     const [phoneIndex, setPhoneIndex] = useState(0);
     //设置样式属性 数组
@@ -56,8 +81,7 @@ function Content() {
     }, [currentStyle], localDomId, treeData)
     //当前路由信息更改时，更改整个dom树
     useEffect(() => {
-        
-        setTreeData(routerData[localRouterName] ? routerData[localRouterName] : []);
+        setTreeData(routerData[localRouterName] ? routerData[localRouterName] : {...DomRoot});
     }, [localRouterName])
     //鼠标监听函数
     const handleKeyDown = (e) => {
@@ -78,7 +102,7 @@ function Content() {
                 arrowDir('KeyS', id, styleSheet);
                 break;
             case 'Delete':
-                deleteNode(id, window.treeData);
+                deleteNode(id, window.treeData.childNode);
                 break;
         }
     };
@@ -102,17 +126,19 @@ function Content() {
                 styleSheet.marginTop++;
                 break;
         }
-        setTreeData([].concat(insertNodeStyle(id, window.treeData, styleSheet)));
+        setTreeData(Object.assign({},insertNodeStyle(id, window.treeData, styleSheet)));
     }
     //拖拽函数 两种状态 已经在内容模块的、不在内容模块的
     const dragEnd = (item, monitor) => {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
-        let [originY, originX] = [phoneNode.offsetTop, phoneNode.offsetLeft]
+        let [originY, originX] = [phoneNode.offsetTop, phoneNode.offsetLeft];
+        //滚动轴偏移量
+        let scrollY=phoneNode.scrollTop||phoneNode.pageYOffset||0;
         if (item.type === 'UseTool.Float' || item.type === 'UseComponent.Float') {
-            floatCeilCeilAddOrInsert(item, x, y, originX, originY);
+            floatCeilCeilAddOrInsert(item, x, y+scrollY, originX, originY);
         } else {
-            containerCeilAddOrInsert(item, x, y, originX, originY);
+            containerCeilAddOrInsert(item, x, y+scrollY, originX, originY);
         }
 
     }
@@ -159,9 +185,6 @@ function Content() {
             let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);
             treeAdd(null, item, y - originY - resxy.height - resxy.y, x - originX);
         }
-        //计算已经有的物理高度
-        let resxy = getLastCeilXy(null, treeData, item.id, item.isHave);
-        setTreeHeight(resxy.height + resxy.y);
     }
     //浮动元素添加或者插入
     const floatCeilCeilAddOrInsert = (item, x, y, originX, originY) => {
@@ -169,7 +192,8 @@ function Content() {
             let resultSheet = findNode(item.id, treeData).styleSheet;
             resultSheet.top = y - originY;
             resultSheet.left = x - originX;
-            insertNodeStyle(item.id, treeData, resultSheet);
+            let tree=insertNodeStyle(item.id, treeData, resultSheet);
+            setTreeData(Object.assign({},tree));
         } else {
             treeAdd(null, item, y - originY, x - originX);
         }
@@ -183,7 +207,7 @@ function Content() {
             id = findConceilById(parentNode.childNode, chooseId, isHave);
         } else {
             resultNode = tree;
-            id = findConceilById(tree, chooseId, isHave);
+            id = findConceilById(tree.childNode, chooseId, isHave);
         }
 
         if (!id) {
@@ -230,60 +254,59 @@ function Content() {
                 styleSheet.flexDirection = 'row';
                 break;
             case 'UseTool.DivTwo':
+                styleSheet=copyDivStyleAttr(styleSheet,localItem,top,left);
                 node = UseTool.DivTwo;
-                styleSheet.width = localItem.styleAttr.width.value;
-                styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
-                styleSheet.marginTop = top;
-                styleSheet.marginLeft = left;
                 break;
             case 'UseTool.DivThree':
+                styleSheet=copyDivStyleAttr(styleSheet,localItem,top,left);
                 node = UseTool.DivThree;
-                styleSheet.width = localItem.styleAttr.width.value;
-                styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
-                styleSheet.marginTop = top;
-                styleSheet.marginLeft = left;
                 break;
             case 'UseTool.Float':
-                styleSheet.width = localItem.styleAttr.width.value;
-                styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.position = 'absolute';
-                styleSheet.top = top;
-                styleSheet.left = left;
-                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+                styleSheet=copyFloatStyleAttr(styleSheet,localItem,top,left);
                 node = UseTool.Float;
                 break;
             case 'UseTool.FloatTwo':
-                styleSheet.width = localItem.styleAttr.width.value;
-                styleSheet.height = localItem.styleAttr.height.value;
-                styleSheet.position = 'absolute';
-                styleSheet.top = top;
-                styleSheet.left = left;
-                styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+                styleSheet=copyFloatStyleAttr(styleSheet,localItem,top,left);
                 node = UseTool.FloatTwo;
                 break;
-                
+            case 'UseTool.FloatThree':
+                styleSheet=copyFloatStyleAttr(styleSheet,localItem,top,left);
+                node = UseTool.FloatThree;
+                break;
             default:
         }
         let item = { name: node, tag: localItem.tag, dataAttr: localItem.dataAttr, id: makeOnlyId(), styleAttr: localItem.styleAttr, styleSheet: styleSheet, childNode: [] };
         //如果父亲节点id 执行插入子树操作
         if (parentId) {
-            insertChildNode(parentId, treeData, item);
+            treeData.childNode=insertChildNode(parentId, treeData.childNode, item);
         } else {
-            treeData.push(item);
+            treeData.childNode.push(item);
         }
-        setTreeData([].concat(treeData));
+        debugger
+        setTreeData(Object.assign({},treeData));
 
     }
-    //复制模板属性给与正在添加的tree
-    const copyAttr = (item, top, left) => {
-        let styleSheet = {};
-        for (let i in item.styleAttr) {
-            styleSheet[i] = item.styleAttr[i].value;
-        }
-        console.log(styleSheet);
+
+    //物理元素样式赋值
+    const copyDivStyleAttr=(styleSheet,localItem,top,left)=>{
+        styleSheet.width = localItem.styleAttr.width.value;
+        styleSheet.height = localItem.styleAttr.height.value;
+        styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+        styleSheet.marginTop = top;
+        styleSheet.marginLeft = left;
+        return styleSheet;
     }
+    //浮动元素初始样式赋值
+    const copyFloatStyleAttr=(styleSheet,localItem,top,left)=>{
+        styleSheet.width = localItem.styleAttr.width.value;
+        styleSheet.height = localItem.styleAttr.height.value;
+        styleSheet.position = 'absolute';
+        styleSheet.top = top;
+        styleSheet.left = left;
+        styleSheet.backgroundColor = localItem.styleAttr.backgroundColor.value;
+        return styleSheet;
+    }
+
     //快速给某个节点添加一个子节点
     const insertChildNode = (id, tree, childNode) => {
         if (tree.length === 0) {
@@ -305,32 +328,39 @@ function Content() {
     }
     //快速给某个节点插入样式
     const insertNodeStyle = (id, tree, styleSheet) => {
-        console.log(id, tree, styleSheet);
-        if (tree.length === 0) {
+        if(id===tree.id){
+            tree.styleSheet = styleSheet;
             return tree;
         }
-        all: for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                tree[i].styleSheet = styleSheet;
+        if (tree.childNode.length === 0) {
+            return tree;
+        }
+        all: for (let i = 0; i < tree.childNode.length; i++) {
+            if (tree.childNode[i].id === id) {
+                tree.childNode[i].styleSheet = styleSheet;
                 break all;
             } else {
-                tree[i].childNode = insertNodeStyle(id, tree[i].childNode, styleSheet);
+                tree.childNode[i]=insertNodeStyle(id, tree.childNode[i], styleSheet);
             }
         }
         return tree;
     }
     //快速给某节点插入额外属性
     const insertNodeExtralData = (id, tree, extralData) => {
-        console.log(id, tree, extralData);
-        if (tree.length === 0) {
+    
+        if(tree.id===id){
+            tree.dataAttr=extralData;
             return tree;
         }
-        all: for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                tree[i].dataAttr = extralData;
+        if (tree.childNode.length === 0) {
+            return tree;
+        }
+        all: for (let i = 0; i < tree.childNode.length; i++) {
+            if (tree.childNode[i].id === id) {
+                tree.childNode[i].dataAttr = extralData;
                 break all;
             } else {
-                tree[i].childNode = insertNodeExtralData(id, tree[i].childNode, extralData);
+                tree.childNode[i].childNode = insertNodeExtralData(id, tree.childNode[i], extralData);
             }
         }
         return tree;
@@ -338,18 +368,15 @@ function Content() {
     //快速查找某个节点并返回
     const findNode = (id, tree) => {
         console.log(id, tree);
-        if (tree.length === 0) {
+        if(tree.id===id){
+            return tree;
+        }
+        if (tree.childNode.length === 0) {
             return false;
         }
-        //依次遍历兄弟结点
-        for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                return tree[i];
-            }
-        }
         //接着遍历子结点
-        for (let i = 0; i < tree.length; i++) {
-            let result = findNode(id, tree[i].childNode);
+        for (let i = 0; i < tree.childNode.length; i++) {
+            let result = findNode(id, tree.childNode[i]);
             if (result) {
                 return result;
             }
@@ -373,7 +400,8 @@ function Content() {
             return tree;
         };
         let result = lunFind(id, tree);
-        setTreeData([].concat(result));
+        treeData.childNode=result;
+        setTreeData(Object.assign({},treeData));
     }
     //快速复制某个节点到对应的父亲节点
     const copyNode = (id, tree) => {
@@ -394,7 +422,8 @@ function Content() {
             return tree;
         };
         let result = lunFind(id, tree);
-        setTreeData([].concat(result));
+        treeData.childNode=result;
+        setTreeData(Object.assign({},treeData));
     }
     //调节节点顺序
     const changeSort = (tree, id, action) => {
@@ -410,16 +439,18 @@ function Content() {
                 break;
             }
         }
-        console.log(tree);
-        setTreeData([].concat(tree));
+        treeData.childNode=tree;
+        setTreeData(Object.assign({},treeData));
     }
-    //状态树渲染
+    //状态树渲染 以根结点 广度遍历
     const treeRender = (tree) => {
-        if (tree.length === 0) {
-            return '';
-        }
-        let result = tree.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>);
-        return result;
+        console.log(tree);
+        let result = tree.childNode.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>); 
+        return <>
+        <div  onClick={()=>localEditComponent(tree)}   onKeyDown={(e) => handleKeyDown(e)} id={localRouterName} onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7',...tree.styleSheet }}>
+            {result}
+        </div>
+        </>;
     }
     //路由新增或者修改
     const addRouter = () => {
@@ -476,9 +507,9 @@ function Content() {
     );
     //设置路由选择菜单
     const routeMenu = (
-    <Menu onClick={({ key }) =>{setLocalRouterName(key);routerData[localRouterName] = treeData;} }>
-        {Object.keys(routerData).map( key => <Menu.Item key={key}>{key}</Menu.Item>)}
-    </Menu>
+        <Menu onClick={({ key }) => { setLocalRouterName(key); routerData[localRouterName] = treeData; }}>
+            {Object.keys(routerData).map(key => <Menu.Item key={key}>{key}</Menu.Item>)}
+        </Menu>
     );
     //设置选择框菜单
     const styleMenu = (attr, item) => {
@@ -503,7 +534,7 @@ function Content() {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
         console.log(styleSheet);
-        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
+        setTreeData(Object.assign({},insertNodeStyle(localDomId, treeData, styleSheet)) );
     }
     //额外属下输入框
     const extralChange = (event, mean) => {
@@ -513,7 +544,7 @@ function Content() {
                 extralAttr[i].value = event.target.value
             }
         }
-        setTreeData([].concat(insertNodeExtralData(localDomId, treeData, extralAttr)));
+        setTreeData(Object.assign({},insertNodeExtralData(localDomId, treeData, extralAttr)));
     }
     //新增路由编辑信息
     const editAddRouterData = (e) => {
@@ -536,7 +567,7 @@ function Content() {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
         setCurrentStyle([].concat(currentStyle));
-        setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
+        setTreeData(Object.assign({},insertNodeStyle(localDomId, treeData, styleSheet)));
 
     }
     //返回额外属性的样式表
@@ -560,7 +591,7 @@ function Content() {
             <div className="i_info">{PhoneList[phoneIndex].height}</div>
             <Dropdown className="i_lable" overlay={routeMenu} placement="bottomLeft">
                 <div onClick={e => e.preventDefault()}>
-                   当前路由: { localRouterName }
+                    当前路由: {localRouterName}
                 </div>
             </Dropdown>
             <div className="btn" onClick={getLocalEditHtml} >获取HTML代码</div>
@@ -581,15 +612,15 @@ function Content() {
             </div>
             {/* 操作 */}
             <div className="panel_action">
-                <div className='item' onClick={() => changeSort(treeData, localDomId, 'up')}><svg style={{ transform: 'rotate(180deg)' }} t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">上移</div></div>
-                <div className='item' onClick={() => changeSort(treeData, localDomId, 'down')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">下移</div></div>
-                <div className='item' onClick={() => copyNode(localDomId, treeData)}><svg t="1603348645892" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4275" width="64" height="64"><path d="M832 448H444.8c-19.2 0-32-12.8-32-32s12.8-32 32-32H832c19.2 0 32 12.8 32 32s-12.8 32-32 32z" p-id="4276" fill="#e6e6e6"></path><path d="M640 643.2c-19.2 0-32-12.8-32-32V220.8c0-19.2 12.8-32 32-32s32 12.8 32 32v393.6c0 16-12.8 28.8-32 28.8zM704 1024H64c-35.2 0-64-28.8-64-64V320c0-35.2 28.8-64 64-64h96c19.2 0 32 12.8 32 32s-12.8 32-32 32H64v640h640v-96c0-19.2 12.8-32 32-32s32 12.8 32 32v96c0 35.2-28.8 64-64 64z" p-id="4277" fill="#e6e6e6"></path><path d="M960 768H320c-35.2 0-64-28.8-64-64V64c0-35.2 28.8-64 64-64h640c35.2 0 64 28.8 64 64v640c0 35.2-28.8 64-64 64zM320 64v640h640V64H320z" p-id="4278" fill="#e6e6e6"></path></svg><div className="action-lable">复制</div></div>
+                <div className='item' onClick={() => changeSort(treeData.childNode, localDomId, 'up')}><svg style={{ transform: 'rotate(180deg)' }} t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">上移</div></div>
+                <div className='item' onClick={() => changeSort(treeData.childNode, localDomId, 'down')}><svg t="1603327711985" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3084" width="64" height="64"><path d="M512 995.552l398.224-568.88H739.544V312.888H284.44v113.784H113.776L512 995.552zM739.544 142.216H284.44V256h455.104V142.216z m0-113.768H284.44v56.88h455.104v-56.88z" p-id="3085" fill="#e6e6e6"></path></svg><div className="action-lable">下移</div></div>
+                <div className='item' onClick={() => copyNode(localDomId, treeData.childNode)}><svg t="1603348645892" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4275" width="64" height="64"><path d="M832 448H444.8c-19.2 0-32-12.8-32-32s12.8-32 32-32H832c19.2 0 32 12.8 32 32s-12.8 32-32 32z" p-id="4276" fill="#e6e6e6"></path><path d="M640 643.2c-19.2 0-32-12.8-32-32V220.8c0-19.2 12.8-32 32-32s32 12.8 32 32v393.6c0 16-12.8 28.8-32 28.8zM704 1024H64c-35.2 0-64-28.8-64-64V320c0-35.2 28.8-64 64-64h96c19.2 0 32 12.8 32 32s-12.8 32-32 32H64v640h640v-96c0-19.2 12.8-32 32-32s32 12.8 32 32v96c0 35.2-28.8 64-64 64z" p-id="4277" fill="#e6e6e6"></path><path d="M960 768H320c-35.2 0-64-28.8-64-64V64c0-35.2 28.8-64 64-64h640c35.2 0 64 28.8 64 64v640c0 35.2-28.8 64-64 64zM320 64v640h640V64H320z" p-id="4278" fill="#e6e6e6"></path></svg><div className="action-lable">复制</div></div>
                 <div className='item' onClick={() => { setAddRouterPop(true); setRouterAction('add'); }}><svg t="1603413048850" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3101" width="64" height="64"><path d="M960.186 639.965H768.149V448.209h-64.012v191.756H512.099v63.919h192.037v191.773l64.012-0.017V703.883h192.037v-63.918z m0 0M832.162 127.99H64.012V63.946l768.15-0.078zM768.149 127.99h64.012v255.964h-64.012zM128.025 831.721l-64.013 0.164V127.99h63.978z" p-id="3102" fill="#ffffff"></path><path d="M64.212 831.721h319.862v63.919H64.212zM192.08 319.891h384.075v-63.919H192.08v63.919z m0 127.768l320.062 0.069v-63.919H192.08v63.85z m0 128.317h192.037v-63.891l-192.037-0.028v63.919z m0 0" p-id="3103" fill="#ffffff"></path></svg><div className="action-lable">新增页面</div></div>
             </div>
             <div className='panel_phone' id="panel_phone">
-                <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+                   <div className="phone_canvas" id="phone_canvas">
                     {treeRender(treeData)}
-                </div>
+                  </div> 
             </div>
 
             {/* 属性面板 */}
@@ -620,7 +651,7 @@ function Content() {
                                         {item.value}
                                     </div>
                                 </Dropdown> : ''}
-                                {item.type === 'text' ? <div className="value" >  <InputNumber min={0} mean={item.mean}  value={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
+                                {item.type === 'text' ? <div className="value" >  <InputNumber min={0} mean={item.mean} value={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
 
                             </div>}
                     </>

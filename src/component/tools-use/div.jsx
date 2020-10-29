@@ -36,7 +36,7 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
     }
     //渲染子节点
     const treeRender = (tree) => {
-        return tree.map(item => <item.name callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} parentId={id} childNodeList={item.childNode} dragCallBack={dragCallBack} ></item.name>);
+        return tree.map(item => <item.name callback={localEditComponent} childClick={childClick} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} parentId={id} childNodeList={item.childNode} dragCallBack={dragCallBack} ></item.name>);
     }
     //点击编辑当前 
     const localEditComponent = (e,item) => {
@@ -44,13 +44,18 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
        childClick(item);
        e.stopPropagation();
     }
+    //点击编辑当前样式
+    const localClick=(e)=>{
+        callback({ styleSheet, dataAttr, styleAttr, id });
+        e.stopPropagation();
+    }
     //右键点击事件
     const rightMenuClick=(e)=>{
         e.preventDefault();
         console.log('右键点击');
     }
     return<>
-     <div className="use-div" id={id} key={id} ref={drag} onContextMenu={(e)=>rightMenuClick(e)}  onClick={callback.bind(this, { styleSheet, dataAttr, styleAttr, id })}
+     <div className="use-div" id={id} key={id} ref={drag} onContextMenu={(e)=>rightMenuClick(e)}  onClick={(e)=>localClick(e)}
         style={{
             opacity: isDragging ? 0 : 1,
             cursor: 'move',
