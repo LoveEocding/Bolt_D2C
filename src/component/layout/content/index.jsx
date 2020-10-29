@@ -11,7 +11,7 @@ const DomRoot={
     styleAttr: {
          height: {
              lable: '高',
-             type: 'text',
+             type: 'number',
              value:25
          },
          backgroundColor:{
@@ -447,7 +447,7 @@ function Content() {
         console.log(tree);
         let result = tree.childNode.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>); 
         return <>
-        <div  onClick={()=>localEditComponent(tree)}   onKeyDown={(e) => handleKeyDown(e)} id={localRouterName} onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7',...tree.styleSheet }}>
+        <div  onClick={()=>localEditComponent(tree)}   onKeyDown={(e) => handleKeyDown(e)} id={localRouterName} onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7',...tree.styleSheet,background:`url(${tree.styleSheet.backgroundImage}) 0% 0% /100% 100%` }}>
             {result}
         </div>
         </>;
@@ -534,6 +534,7 @@ function Content() {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
         console.log(styleSheet);
+        debugger
         setTreeData(Object.assign({},insertNodeStyle(localDomId, treeData, styleSheet)) );
     }
     //额外属下输入框
@@ -623,7 +624,7 @@ function Content() {
                   </div> 
             </div>
 
-            {/* 属性面板 */}
+            {/* 样式面板 */}
             <div className="panel_attributes">
                 <div className="panel_head" >样式属性</div>
                 {currentStyle.map(item =>
@@ -651,7 +652,8 @@ function Content() {
                                         {item.value}
                                     </div>
                                 </Dropdown> : ''}
-                                {item.type === 'text' ? <div className="value" >  <InputNumber min={0} mean={item.mean} value={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
+                                {item.type === 'number' ? <div className="value" >  <InputNumber min={0} mean={item.mean} value={item.value} onChange={(value) => styleChange(value, item.mean)} /></div> : ''}
+                                {item.type === 'text' ? <div className="value" >  <Input  mean={item.mean} value={item.value} onChange={(e) => styleChange(e.target.value, item.mean)} /></div> : ''}
 
                             </div>}
                     </>
