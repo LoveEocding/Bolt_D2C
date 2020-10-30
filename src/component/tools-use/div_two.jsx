@@ -53,6 +53,7 @@ function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id,p
             ...styleSheet,
             backgroundImage: `url(${styleSheet.backgroundImage})`,
             backgroundSize: '100% 100%',
+            flexWrap:'wrap'
         }}>
         {/* 上线差距 */}
         <div className="line" style={{ position: 'absolute', left: '50%', top: -1 * styleSheet.marginTop, height: styleSheet.marginTop, width: 1, border: '1px solid red' }}>
@@ -64,6 +65,7 @@ function DivUseTwo({ styleSheet, dataAttr, styleAttr, callback, childClick, id,p
         </div>
         <div ref={drop} style={{
             display: 'inherit', alignItems: 'inherit',
+            flexWrap:'inherit',
             justifyContent: 'inherit', flexDirection: 'inherit', width: '100%', minHeight: 'inherit', height: '100%', border: isOver ? '1px solid #50e3c2' : ''
         }}>
             {dataAttr.text.value}

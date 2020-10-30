@@ -282,7 +282,6 @@ function Content() {
         } else {
             treeData.childNode.push(item);
         }
-        debugger
         setTreeData(Object.assign({},treeData));
 
     }
@@ -360,7 +359,7 @@ function Content() {
                 tree.childNode[i].dataAttr = extralData;
                 break all;
             } else {
-                tree.childNode[i].childNode = insertNodeExtralData(id, tree.childNode[i], extralData);
+                tree.childNode[i] = insertNodeExtralData(id, tree.childNode[i], extralData);
             }
         }
         return tree;
@@ -534,7 +533,6 @@ function Content() {
             styleSheet[currentStyle[i].mean] = currentStyle[i].value;
         }
         console.log(styleSheet);
-        debugger
         setTreeData(Object.assign({},insertNodeStyle(localDomId, treeData, styleSheet)) );
     }
     //额外属下输入框

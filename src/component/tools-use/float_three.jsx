@@ -5,7 +5,7 @@ import './div.scss';
 
 function FloatThree({styleSheet,dataAttr,styleAttr,callback,id,localDomId}) {
     const [{ isDragging }, drag,preview] = useDrag({
-        item: { type: 'UseComponent.FloatTwo',tag:'float', id:id,isHave:true,width:styleSheet.width,height:styleSheet.height},
+        item: { type: 'UseComponent.FloatThree',tag:'float', id:id,isHave:true,width:styleSheet.width,height:styleSheet.height},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         }),

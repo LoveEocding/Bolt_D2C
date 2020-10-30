@@ -6,6 +6,9 @@
         display: none;
     }
 }
+.use-div-content::-webkit-scrollbar {
+    display: none;
+}
 .use-div:hover{
     //border:3px dotted #079bbc ;
     .top-line{

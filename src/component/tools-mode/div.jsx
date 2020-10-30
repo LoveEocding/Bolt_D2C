@@ -19,10 +19,31 @@ function DivComponent() {
                }
             },
             styleAttr: {
+                width:{
+                    lable:'宽',
+                    type: 'number',
+                    value:375
+                },
                 height: {
                     lable: '高',
-                    type: 'text',
+                    type: 'number',
                     value:60
+                },
+                marginTop: {
+                    lable: '上间距',
+                    type: 'number',
+                    value: 0
+                },
+                marginLeft:{
+                    lable:'左间距',
+                    type: 'number',
+                    value:0
+                    
+                },
+                backgroundImage:{
+                    lable:'背景图片',
+                    type:'text',
+                    value:''
                 },
                 flexDirection:{
                     lable: '设置主轴方向',
@@ -40,29 +61,31 @@ function DivComponent() {
                     type: 'select',
                     value: '',
                     select: ['center', 'flex-end', 'flex-start']
-                },marginTop: {
-                    lable: '上间距',
-                    type: 'text',
-                    value: '0px'
+                },
+                overflow:{
+                    lable: '是否滚动',
+                    type: 'select',
+                    value: '',
+                    select: ['hidden', 'scroll']
                 },
                 paddingTop:{
                     lable:'内边距-上',
-                    type:'text',
+                    type:'number',
                     value:5,
                 },
                 paddingBottom:{
                     lable:'内边距-下',
-                    type:'text',
+                    type:'number', 
                     value:5,
                 },
                 paddingLeft:{
                     lable:'内边距-左',
-                    type:'text',
+                    type:'number',
                     value:5,
                 },
                 paddingRight:{
                     lable:'内边距-右',
-                    type:'text',
+                    type:'number',
                     value:5,
                 },
                 backgroundColor:{
@@ -77,11 +100,12 @@ function DivComponent() {
                     value:'#FFFFFF',
                     pickerIsShow:false,
                 },
-                backgroundImage:{
-                    lable:'背景图片',
-                    type:'text',
-                    value:''
-                }
+                fontSize:{
+                    lable:'字体大小',
+                    type:'number',
+                    value:16
+                },
+           
             },
             collect: monitor => ({
                 isDragging: !!monitor.isDragging(),

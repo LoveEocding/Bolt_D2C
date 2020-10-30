@@ -65,13 +65,17 @@ function DivUse({ styleSheet, dataAttr, styleAttr, callback,childClick,id, local
             ...styleSheet,
             backgroundImage:`url(${styleSheet.backgroundImage})`,
             backgroundSize:'100% 100%',
-            marginLeft:0
+            flexWrap:'wrap'
         }}  >
         {/* 上线差距 */}
         <div className='top-line'  style={{  position:'absolute',left:'50%',top:-1*styleSheet.marginTop,height:styleSheet.marginTop,width:1,border:'1px solid red'}}>
-            <div style={{ position:'absolute',top:'50%',left:3 }}>{ styleSheet.marginTop+'px' }</div> 
+            <div style={{ position:'absolute',top:'50%',left:3,fontSize:12 }}>{ styleSheet.marginTop+'px' }</div> 
         </div>
-        <div ref={drop} style={{ display:'inherit',alignItems: 'inherit',
+            {/* 左线差距 */}
+        <div className='line' style={{ position: 'absolute', top: '50%', left: -1 * styleSheet.marginLeft, width: styleSheet.marginLeft, height: 1, border: '1px solid red' }}>
+            <div style={{ position: 'absolute', left: '50%', top: 3,fontSize:12 }}>{styleSheet.marginLeft + 'px'}</div>
+        </div>
+        <div className="use-div-content" ref={drop} style={{ display:'inherit',alignItems: 'inherit',flexWrap:'inherit',
         justifyContent:'inherit',flexDirection:'inherit', width: '100%', height: '100%', border: isOver ? '1px solid #50e3c2' : '' }}> 
         {dataAttr.text.value}
         {treeRender(childNodeList)}
