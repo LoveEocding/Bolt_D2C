@@ -1,15 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { Provider } from 'react-redux'
+import zhCN from 'antd/es/locale/zh_CN';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter as Router,Route} from 'react-router-dom'
+import 'antd/dist/antd.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import RouteList from './routers';
+
+const Routes = RouteList.map(item => <Route exact path={item.path} render={() => {
+  document.title = (item.meta && item.meta.title) || 'Quick_Tem';
+  return item.component;
+}}>
+</Route>)
+
 ReactDOM.render(
-    <Router>
-        <Route path="/" component={App}>
-        </Route>
-    </Router>,
+  <Router>
+    {Routes}
+  </Router>,
   document.getElementById('root')
 );
 

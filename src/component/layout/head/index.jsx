@@ -1,9 +1,15 @@
 import React from 'react'
 import './index.scss'
+import { Button } from 'antd';
 class Head extends React.Component {
     render() {
         return <div className="head">
-            <div className="tit">Activity-Factory</div>
+            <div className="l">Bolt-活动搭建</div>
+            <div className="r">
+                <Button type="primary">预览</Button>
+                <Button type="primary">保存</Button>
+                <Button type="primary">发布</Button>
+            </div>
         </div>
     }
 }

@@ -1,0 +1,44 @@
+.left_tools {
+    width: 15vw;
+    position: relative;
+    background: white;
+    display: flex;
+}
+
+.main {
+    flex: 1;
+}
+
+.line {
+    width: 1px;
+    height: 100%;
+}
+
+.line:hover {
+    background: #1593ff;
+}
+
+.expend {
+    position: absolute;
+    width: 16px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    top: 50%;
+    right: -16px;
+    transform: translate(0, -50%);
+    cursor: grabbing;
+}
+
+.expend:hover {
+    background: #1593ff;
+}
+
+
+
+.shrink {
+    width: 0;
+
+}
