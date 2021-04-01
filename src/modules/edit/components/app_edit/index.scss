@@ -1,25 +1,26 @@
 .content {
     flex: 1;
     height: 100%;
-    background: #a7a6a5;
 
     .btn {
-        padding: 10px;
-        font-size: 16px;
+        padding: 5px 10px;
+        font-size: 14px;
         border: 1px solid rgb(168, 166, 170);
         margin-right: 20px;
         cursor: pointer;
     }
 
+    .btn_active {
+        border: 1px solid #1890ff;
+    }
+
     .console {
         width: 100%;
         height: 80px;
-        background: #d8d2d4;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 16px;
-        color: gray;
 
         .i_lable {
             background: white;
@@ -40,7 +41,7 @@
         display: flex;
 
         .phone_canvas {
-            margin: 20px 0px 0px 20%;
+            margin: 0 auto;
             overflow: scroll;
             position: relative;
             background: white;

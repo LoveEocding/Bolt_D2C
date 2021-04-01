@@ -1,0 +1,45 @@
+.right_action {
+    width: 20vw;
+    height: 100%;
+    background: white;
+    display: flex;
+
+}
+
+.main {
+    flex: 1;
+}
+
+.line {
+    width: 1px;
+    height: 100%;
+    position: relative;
+}
+
+.line:hover {
+    background: #1593ff;
+}
+
+.expend {
+    position: absolute;
+    width: 16px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    top: 50%;
+    left: -16px;
+    transform: translate(0, -50%);
+    cursor: e-resize;
+
+    .t {
+        width: 1px;
+        height: 15px;
+        background: black;
+    }
+}
+
+.expend:hover {
+    background: #1593ff;
+}

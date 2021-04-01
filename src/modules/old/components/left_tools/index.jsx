@@ -1,15 +1,13 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useState } from 'react';
-import LeftMenu from '@common/components/left_menu';
 export default function (props) {
 
     //收缩
     const [expend, setExpend] = useState(true);
     return <div className={expend ? `${ClassStyle.left_tools}` : `${ClassStyle.left_tools} ${ClassStyle.shrink}`}>
-        <div className={ClassStyle.main}> <LeftMenu /></div>
+        <div className={ClassStyle.main}></div>
         <div className={ClassStyle.line}>
-
             <div className={ClassStyle.expend} onClick={() => {
                 setExpend(!expend);
             }}>

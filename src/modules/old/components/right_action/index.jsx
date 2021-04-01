@@ -4,7 +4,6 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useState } from 'react'
-import TopMenu from '@src/modules/common/components/top_menu';
 export default function (props) {
 
     //收缩
@@ -33,14 +32,12 @@ export default function (props) {
     }
 
 
-    return <div style={{ width: `calc(40vw + ${dragWidth}px)` }} className={ClassStyle.right_action} >
+    return <div style={{ width: `calc(20vw + ${dragWidth}px)` }} className={ClassStyle.right_action} >
         <div className={ClassStyle.line}>
             <div className={ClassStyle.expend} onMouseDown={handerMouseDown} >
                 <div className={ClassStyle.t}></div>
             </div>
         </div>
-        <div className={ClassStyle.main}>
-            <TopMenu />
-        </div>
+        <div className={ClassStyle.main}></div>
     </div>
 }

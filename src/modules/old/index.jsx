@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from '../../component/layout/head/index.jsx';
-import Container from './components/container';
+import Container from '../../component/layout/container';
 import Style from './index.module.scss';
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

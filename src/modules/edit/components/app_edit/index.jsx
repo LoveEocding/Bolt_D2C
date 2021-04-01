@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import './index.scss';
 import { useDrop } from 'react-dnd';
-import PhoneList from '../../../phone.config.js'; //机型数据配置文件
-import { Menu, Dropdown } from 'antd';
-import UseTool from '../../tools-use/index.js'; //引入真实使用的组件
-import { SketchPicker } from 'react-color';
+import PhoneList from '@src/phone.config.js'; //机型数据配置文件
+import { Menu } from 'antd';
+import UseTool from '@src/component/tools-use/index.js'; //引入真实使用的组件
+import { useSelector, useDispatch } from 'react-redux'
+import { deleteNode } from '../../../../store/threeData';
 
 function Content() {
+    //声明store
+    const treeData = useSelector((state) => state.counter.value);
+    const dispatch = useDispatch();
+
     //瀑布流已经有的高度
     const [treeHeight, setTreeHeight] = useState(0);
-    //历史路由状态树
-    const [routerData, setRouteData] = useState([]);
-    //生成状态树
-    const [treeData, setTreeData] = useState([]);
-    // 声明一个叫 "count" 的 state 变量
-    const [phoneIndex, setPhoneIndex] = useState(0);
     //设置样式属性 数组
     const [currentStyle, setCurrentStyle] = useState([]);
     //声明一个当前正在编辑的ID
     const [localDomId, setLocalDomId] = useState('');
     //声明功能属性
     const [extralAttr, setExtralAttr] = useState({});
+
+    //声明接受的组件
     const [{ isOver }, drop] = useDrop({
         accept: ['UseTool.Div', 'UseComponent.Div', 'UseTool.Float', 'UseComponent.Float'],
         drop: (item, monitor) => dragEnd(item, monitor),
@@ -63,7 +65,7 @@ function Content() {
                 arrowDir('ArrowDown', id, styleSheet);
                 break;
             case 'Delete':
-                deleteNode(id, window.treeData);
+                dispatch(deleteNode(id, window.treeData));
                 break;
         }
     };
@@ -278,86 +280,10 @@ function Content() {
     const makeOnlyId = () => {
         return new Date().getTime() - 1000;
     }
-    //快速给某个节点插入样式
-    const insertNodeStyle = (id, tree, styleSheet) => {
-        console.log(id, tree, styleSheet);
-        if (tree.length === 0) {
-            return tree;
-        }
-        all: for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                tree[i].styleSheet = styleSheet;
-                break all;
-            } else {
-                tree[i].childNode = insertNodeStyle(id, tree[i].childNode, styleSheet);
-            }
-        }
-        return tree;
-    }
-    //快速给某节点插入额外属性
-    const insertNodeExtralData = (id, tree, extralData) => {
-        console.log(id, tree, extralData);
-        if (tree.length === 0) {
-            return tree;
-        }
-        all: for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                tree[i].dataAttr = extralData;
-                break all;
-            } else {
-                tree[i].childNode = insertNodeExtralData(id, tree[i].childNode, extralData);
-            }
-        }
-        return tree;
-    }
-    //快速查找某个节点并返回
-    const findNode = (id, tree) => {
-        console.log(id, tree);
-        if (tree.length === 0) {
-            return false;
-        }
-        //依次遍历兄弟结点
-        for (let i = 0; i < tree.length; i++) {
-            if (tree[i].id === id) {
-                return tree[i];
-            }
-        }
-        //接着遍历子结点
-        for (let i = 0; i < tree.length; i++) {
-            let result = findNode(id, tree[i].childNode);
-            if (result) {
-                return result;
-            }
-        }
-        return false;
-    }
-    //快速删除某个节点
-    const deleteNode = (id, tree) => {
-        const lunFind = (id, tree) => {
-            //依次遍历兄弟结点
-            for (let i = 0; i < tree.length; i++) {
-                if (tree[i].id === id) {
-                    tree.splice(i, 1);
-                    return tree;
-                }
-            }
-            //接着遍历子结点
-            for (let i = 0; i < tree.length; i++) {
-                tree[i].childNode = lunFind(id, tree[i].childNode);
-            }
-            return tree;
-        };
-        let result = lunFind(id, tree);
-        setTreeData([].concat(result));
-    }
-    //状态树渲染
-    const treeRender = (tree) => {
-        if (tree.length === 0) {
-            return '';
-        }
-        let result = tree.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>);
-        return result;
-    }
+
+
+
+
     //点击编辑当前 
     const localEditComponent = (item) => {
         setLocalDomId(item.id);
@@ -398,12 +324,7 @@ function Content() {
         setCurrentStyle([].concat(currentStyle));
     }
 
-    //设置机型选择菜单
-    const menu = (
-        <Menu onClick={({ key }) => setPhoneIndex(key)}>
-            {PhoneList.map((item, index) => <Menu.Item key={index}>{item.name}</Menu.Item>)}
-        </Menu>
-    );
+
     //设置选择框菜单
     const styleMenu = (attr, item) => {
         return <Menu onClick={({ key }) => selectChange(attr, key)}>
@@ -452,76 +373,26 @@ function Content() {
         setTreeData([].concat(insertNodeStyle(localDomId, treeData, styleSheet)));
 
     }
-    //返回额外属性的样式表
+    //状态树渲染
+    const treeRender = (tree) => {
+        if (tree.length === 0) {
+            return '';
+        }
+        let result = tree.map(item => <item.name dragCallBack={childDragBack} childClick={localEditComponent} callback={localEditComponent} dataAttr={item.dataAttr} styleAttr={item.styleAttr} styleSheet={item.styleSheet} key={item.id} localDomId={localDomId} id={item.id} childNodeList={item.childNode}></item.name>);
+        return result;
+    }
     return <div className="content" id="content">
         <div className="console">
-            <div className="btn">上一页</div>
-            <Dropdown className="i_lable" overlay={menu} placement="bottomLeft">
-                <div onClick={e => e.preventDefault()}>
-                    {PhoneList[phoneIndex].name}
-                </div>
-            </Dropdown>
-            <div className="i_info">{PhoneList[phoneIndex].width}</div>
+            <div className="i_info">375</div>
              x &nbsp;&nbsp;&nbsp;&nbsp;
-            <div className="i_info">{PhoneList[phoneIndex].height}</div>
-            <div className="btn" onClick={getLocalEditHtml} >获取HTML代码</div>
-            <div className="btn">预览</div>
+            <div className="i_info">1167</div>
+            <div className="btn btn_active">edit</div>
+            <div className="btn">preview</div>
+            <div className="btn">导入PSD</div>
         </div>
         <div className="content_panel">
-            {/* 功能属性*/}
-            <div className="panel_attributes" style={{ marginLeft: 'inherit' }}>
-                <div className="panel_head" >功能属性</div>
-                {Object.keys(extralAttr).map(key =>
-                    <>
-                        <div className="text-describe">
-                            <div className="lable">{extralAttr[key].lable}：</div>
-                            <div className="value"><textarea value={extralAttr[key].value} mean={key} onChange={(event) => extralChange(event, key)} /></div>
-                        </div>
-                    </>
-                )}
-            </div>
-
-            <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: PhoneList[phoneIndex].width, height: PhoneList[phoneIndex].height, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+            <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ width: 375, height: 1167, border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {treeRender(treeData)}
-            </div>
-
-            {/* 属性面板 */}
-            <div className="panel_attributes">
-                <div className="panel_head" >样式属性</div>
-                {currentStyle.map(item =>
-                    <>
-
-                        {item.type === 'color' ? <div className="describe">
-                            <div className="lable">{item.lable}：</div>
-                            <div className="value" onClick={() => colorPickerHand(true, item.mean)}>{item.value}</div>
-                            <div onClick={() => colorPickerHand(true, item.mean)} style={{ width: 30, height: 30, backgroundColor: item.value }}></div>
-                            {item.pickerIsShow ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
-                                <div style={{
-                                    position: 'fixed',
-                                    top: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    left: 0,
-                                }} onClick={() => colorPickerHand(false, item.mean)} />
-                                <SketchPicker color={item.value} onChangeComplete={(event) => onCompleteColor(event, item.mean)} />
-                            </div> : null}
-                        </div> :
-                            <div className="describe">
-                                <div className="lable">{item.lable}：</div>
-                                {item.type === 'select' ? <Dropdown className="value" overlay={() => styleMenu(item.mean, item.select)} placement="bottomLeft">
-                                    <div onClick={e => e.preventDefault()}>
-                                        {item.value}
-                                    </div>
-                                </Dropdown> : ''}
-                                {item.type === 'text' ? <div className="value" ><input value={item.value} mean={item.mean} onChange={(event) => styleChange(event, item.mean)} /></div> : ''}
-
-                            </div>}
-                    </>
-                )}
-
-
-
-
             </div>
         </div>
 

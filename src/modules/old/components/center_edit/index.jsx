@@ -3,10 +3,9 @@
  */
 import React from 'react';
 import ClassStyle from './index.module.scss';
-import AppHone from '../app_edit';
 
 export default function (props) {
     return <div className={ClassStyle.center_edit}>
-        <AppHone />
+        <div className={ClassStyle.phone}></div>
     </div>
 }

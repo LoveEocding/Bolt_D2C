@@ -6,6 +6,8 @@ import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import RouteList from './routers';
+import store from './store'
+import { Provider } from 'react-redux'
 
 const Routes = RouteList.map(item => <Route exact path={item.path} render={() => {
   document.title = (item.meta && item.meta.title) || 'Quick_Tem';
@@ -14,9 +16,11 @@ const Routes = RouteList.map(item => <Route exact path={item.path} render={() =>
 </Route>)
 
 ReactDOM.render(
-  <Router>
-    {Routes}
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      {Routes}
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
 

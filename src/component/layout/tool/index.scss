@@ -1,20 +1,19 @@
-.tool{
-    height:100%;
-    min-width: 20vw;
-    background: #f7f7f7;   
-    padding: 20px;
-    border: 1px solid #c3bcbc;
-    .base-conent{
+.tool {
+    height: 100%;
+    padding: 0px 10px;
+
+    .base-conent {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
         padding-bottom: 40px;
-        .lable{
-           width: 100%; 
-           font-weight: bold;
-           font-size: 22px;
-           text-align: left;
-           padding: 20px 0px;
+
+        .lable {
+            width: 100%;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: left;
+            padding: 10px 0px;
         }
     }
 }
