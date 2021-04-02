@@ -4,6 +4,7 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
 export default function ({ currentStyle }) {
+    
     return <div className={ClassStyle.attribute_panel}>
         <div className="panel_attributes">
             <div className="panel_head" >样式属性</div>

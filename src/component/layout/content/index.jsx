@@ -455,17 +455,12 @@ function Content() {
     //返回额外属性的样式表
     return <div className="content" id="content">
         <div className="console">
-            <div className="btn">上一页</div>
-            <Dropdown className="i_lable" overlay={menu} placement="bottomLeft">
-                <div onClick={e => e.preventDefault()}>
-                    {PhoneList[phoneIndex].name}
-                </div>
-            </Dropdown>
-            <div className="i_info">{PhoneList[phoneIndex].width}</div>
+            <div className="i_info">375</div>
              x &nbsp;&nbsp;&nbsp;&nbsp;
-            <div className="i_info">{PhoneList[phoneIndex].height}</div>
-            <div className="btn" onClick={getLocalEditHtml} >获取HTML代码</div>
-            <div className="btn">预览</div>
+            <div className="i_info">1167</div>
+            <div className="btn btn_active">edit</div>
+            <div className="btn">preview</div>
+            <div className="btn">导入PSD</div>
         </div>
         <div className="content_panel">
             {/* 功能属性*/}

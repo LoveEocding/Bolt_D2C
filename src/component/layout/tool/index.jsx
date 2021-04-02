@@ -10,23 +10,17 @@ function Tool() {
     return <div className="tool">
         <div className="base-conent">
             <div className="lable">
-               一级组件
+                一级组件
             </div>
             <ToolDiv></ToolDiv>
             <ToolFloat></ToolFloat>
         </div>
         <div className="base-conent">
             <div className="lable">
-               二级组件
+                二级组件
             </div>
             <ToolDivTwo></ToolDivTwo>
             <ToolFloatTwo></ToolFloatTwo>
-        </div>
-        <div className="base-conent">
-            <div className="lable">
-               配套组件
-            </div>
-            <WheelCompontent></WheelCompontent>
         </div>
 
     </div>
