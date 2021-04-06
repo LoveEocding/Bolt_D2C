@@ -31,6 +31,7 @@ function Content() {
 
     //状态树渲染
     const treeRender = (tree) => {
+
         if (tree.length === 0) {
             return '';
         }
