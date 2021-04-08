@@ -1,0 +1,23 @@
+.head {
+    width: 100%;
+    background: #365680;
+    border-bottom: 1px solid #b4aeae;
+    padding: 10px 10px;
+    display: flex;
+
+    .l {
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+    }
+
+
+    .r {
+        display: flex;
+        margin-left: auto;
+
+        button {
+            margin-right: 20px;
+        }
+    }
+}

@@ -7,19 +7,23 @@ import { useState } from 'react';
 
 const menuType = [
     {
+        name: '样式',
+        component: ''
+    },
+    {
         name: '属性',
         component: ''
     },
     {
-        name: '动画',
-        component: ''
-    },
-    {
-        name: '动作',
+        name: '事件',
         component: ''
     },
     {
         name: '数据',
+        component: ''
+    },
+    {
+        name: '动画',
         component: ''
     },
 ]

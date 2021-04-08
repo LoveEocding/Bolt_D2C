@@ -1,29 +1,25 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useState } from 'react';
-import Tool from '../../../../component/layout/tool';
+import Tool from '@src/modules/common/components/component_tree';
 const menuType = [
     {
-        name: '基础组件',
-        component: <Tool />
-    },
-    {
-        name: '表单组件',
-        component: <Tool />
-    },
-    {
-        name: '活动组件',
-        component: <Tool />
-    },
-
-    {
-        name: '页面层级',
+        name: '组件树',
         component: <Tool />
     },
     {
         name: '页面',
         component: <Tool />
     },
+    {
+        name: '基础组件',
+        component: <Tool />
+    },
+
+    {
+        name: '活动组件',
+        component: <Tool />
+    }
 ]
 
 
