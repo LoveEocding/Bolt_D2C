@@ -1,12 +1,15 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
-import RenderData from '@src/testdata.js';
-
+import { useSelector, useDispatch } from 'react-redux'
+import { importData } from '@src/store/threeData.js';
 
 
 
 //组件树渲染
 const treeRender = (data) => {
+    if (typeof data === 'object' && Object.keys(data).length === 0) {
+        return '';
+    }
     console.log(data);
     return <div className={ClassStyle.tree_main}>
         <div className={ClassStyle.lable}>
@@ -40,7 +43,8 @@ const loop = (list) => {
 }
 
 export default function (props) {
+    const treeData = useSelector((state) => state.three.value)
     return <div className={ClassStyle.component_tree}>
-        {treeRender(RenderData)}
+        {treeRender(treeData)}
     </div>
 }
