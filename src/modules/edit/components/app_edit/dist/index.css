@@ -45,6 +45,18 @@
   background: white;
   cursor: pointer;
 }
+.content .content_panel .phone_canvas * {
+  outline: 1px dotted #d9d9d9;
+}
+.content .content_panel .phone_canvas *:hover {
+  outline: 1px dotted #1890ff;
+}
+.content .content_panel .phone_canvas_view * {
+  outline: none;
+}
+.content .content_panel .phone_canvas_view *:hover {
+  outline: none;
+}
 .content .content_panel .preview {
   margin-left: 30px;
 }

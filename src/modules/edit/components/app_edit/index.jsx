@@ -3,8 +3,8 @@ import { useDrop } from 'react-dnd';
 import { Drawer, message, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import './index.scss';
-import { importData } from '@src/store/threeData.js';
-import { threeRender } from '@src/map/react.jsx';
+import { importData, changeCurrentEditId } from '@src/store/threeData.js';
+import { ThreeRender } from '@src/map/react.jsx';
 
 function Content() {
     const treeData = useSelector((state) => state.three.value)
@@ -12,6 +12,7 @@ function Content() {
     const [astShow, setAstShow] = useState(false); //导入AST面板显示与否
     const [analysisShow, setAnalysisShow] = useState(false); //解析蒙层
     const astInputRef = useRef(null);
+    const [actionModal, setActionModal] = useState('edit');
     let loading = null;
     let AstText = '';//本地AST数据
     //声明一个变量用于保存键盘值
@@ -68,21 +69,27 @@ function Content() {
         }
     }
 
+    //全局点击事件
+    const handerClick = (event) => {
+        console.log(event.target.id)
+        dispatch(changeCurrentEditId({ value: event.target.id }));
+    }
+
     //渲染主体
     return <div className="content" id="content">
         <div className="console">
             <div className="i_info">375</div>
              x &nbsp;&nbsp;&nbsp;&nbsp;
             <div className="i_info">1167</div>
-            <div className="btn btn_active">编辑模式</div>
-            <div className="btn">预览模式</div>
+            <div className={actionModal === 'edit' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('edit') }}>编辑模式</div>
+            <div className={actionModal === 'view' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('view') }}>预览模式</div>
             <div className="btn" onClick={() => { setAstShow(true); }}>导入AST</div>
             <div className="btn">导出代码</div>
 
         </div>
         <div className="content_panel">
-            <div className="phone_canvas" onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
-                {threeRender(treeData)}
+            <div onClick={handerClick} className={actionModal === 'edit' ? 'phone_canvas' : 'phone_canvas phone_canvas_view'} onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+                {ThreeRender(treeData)}
             </div>
         </div>
         <Drawer
