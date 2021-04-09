@@ -4,11 +4,12 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useState } from 'react';
+import StyleEdit from '@src/modules/edit/components/style_edit';
 
 const menuType = [
     {
         name: '样式',
-        component: ''
+        component: <StyleEdit />
     },
     {
         name: '属性',

@@ -6999,6 +6999,15 @@ loader-utils@^1.1.0, loader-utils@^1.2.3, loader-utils@^1.4.0:
     emojis-list "^3.0.0"
     json5 "^1.0.1"
 
+loader-utils@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/loader-utils/download/loader-utils-2.0.0.tgz#e4cace5b816d425a166b5f097e10cd12b36064b0"
+  integrity sha1-5MrOW4FtQloWa18JfhDNErNgZLA=
+  dependencies:
+    big.js "^5.2.2"
+    emojis-list "^3.0.0"
+    json5 "^2.1.2"
+
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -7421,6 +7430,18 @@ moment@^2.24.0, moment@^2.25.3:
   version "2.29.0"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.0.tgz#fcbef955844d91deb55438613ddcec56e86a3425"
   integrity sha512-z6IJ5HXYiuxvFTI6eiQ9dm77uE0gyy1yXNApVHqTcnIKfY9tIwEjlzsZ6u1LQXvVgKeTnv9Xm7NDvJ7lso3MtA==
+
+monaco-editor-webpack-plugin@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/monaco-editor-webpack-plugin/download/monaco-editor-webpack-plugin-3.0.1.tgz?cache=0&sync_timestamp=1615198296876&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmonaco-editor-webpack-plugin%2Fdownload%2Fmonaco-editor-webpack-plugin-3.0.1.tgz#b9bf93314eb2708907c232cfbf359622e7a6d98a"
+  integrity sha1-ub+TMU6ycIkHwjLPvzWWIuem2Yo=
+  dependencies:
+    loader-utils "^2.0.0"
+
+monaco-editor@*:
+  version "0.23.0"
+  resolved "https://registry.npm.taobao.org/monaco-editor/download/monaco-editor-0.23.0.tgz?cache=0&sync_timestamp=1614959318535&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmonaco-editor%2Fdownload%2Fmonaco-editor-0.23.0.tgz#24844ba5640c7adb3a2a3ff3b520cf2d7170a6f0"
+  integrity sha1-JIRLpWQMets6Kj/ztSDPLXFwpvA=
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -9645,6 +9666,14 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-i
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-monaco-editor@^0.43.0:
+  version "0.43.0"
+  resolved "https://registry.npm.taobao.org/react-monaco-editor/download/react-monaco-editor-0.43.0.tgz#495578470db7b27ab306af813b31f206a6bf9d1c"
+  integrity sha1-SVV4Rw23snqzBq+BOzHyBqa/nRw=
+  dependencies:
+    monaco-editor "*"
+    prop-types "^15.7.2"
 
 react-redux@^7.2.1:
   version "7.2.1"

@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd';
 import { Drawer, message, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import './index.scss';
-import { importData, changeCurrentEditId } from '@src/store/threeData.js';
+import { importData, changeCurrentEditId, changeCurrentStyle } from '@src/store/threeData.js';
 import { ThreeRender } from '@src/map/react.jsx';
 
 function Content() {
@@ -73,6 +73,7 @@ function Content() {
     const handerClick = (event) => {
         console.log(event.target.id)
         dispatch(changeCurrentEditId({ value: event.target.id }));
+        dispatch(changeCurrentStyle({ value: event.target.style.cssText }));
     }
 
     //渲染主体

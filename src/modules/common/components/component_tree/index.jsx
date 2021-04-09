@@ -2,7 +2,7 @@ import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useSelector, useDispatch } from 'react-redux'
 
-import { changeCurrentEditId } from '@src/store/threeData.js';
+import { changeCurrentEditId, changeCurrentStyle } from '@src/store/threeData.js';
 
 
 
@@ -10,6 +10,13 @@ export default function (props) {
     const treeData = useSelector((state) => state.three.value);
     const extralData = useSelector((state) => state.three.extral);
     const dispatch = useDispatch();
+
+    //组件点击事件
+    const handerClick = (item) => {
+        dispatch(changeCurrentEditId({ value: item.id }));
+        dispatch(changeCurrentStyle({ value: item.props.style }));
+    }
+
     //组件树渲染
     const treeRender = (data) => {
         if (typeof data === 'object' && Object.keys(data).length === 0) {
@@ -33,7 +40,7 @@ export default function (props) {
             return '';
         }
         return list.map(item => <div className={ClassStyle.parent}>
-            <div onClick={() => { dispatch(changeCurrentEditId({ value: item.id })) }} className={ClassStyle.lable} style={{ outline: item.id === extralData.currentEditId ? '1px solid red' : '' }} >
+            <div onClick={() => { handerClick(item) }} className={ClassStyle.lable} style={{ outline: item.id === extralData.currentEditId ? '1px solid red' : '' }} >
                 <span className={ClassStyle.path}></span>
                 {item.children ? <span className={ClassStyle.dir} ></span> : ''}
                 <i className={'icon_' + item.componentName}>
