@@ -46,5 +46,5 @@ export const ThreeRender = (tree) => {
     if (typeof tree === 'object' && Object.keys(tree).length === 0) {
         return '';
     }
-    return <div className={tree.props.className} style={tree.props.style}>{loop(tree.children)}</div>
+    return <div className={tree.props.className} id={tree.id} style={tree.props.style}>{loop(tree.children)}</div>
 }

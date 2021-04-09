@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.changeCurrentStyle = exports.changeCurrentEditId = exports.importData = exports.counterSlice = void 0;
+exports["default"] = exports.editDomStyle = exports.changeCurrentStyle = exports.changeCurrentEditId = exports.importData = exports.counterSlice = void 0;
 
 var _toolkit = require("@reduxjs/toolkit");
 
@@ -36,6 +36,46 @@ var cssTojson = function cssTojson(val) {
   }
 
   return obj;
+};
+/**
+ * 广度遍历一棵树 执行操作
+ * @param {*} tree  树结构
+ * @param {*} id    查询ID
+ * @param {*} fn    执行方法
+ * @param {*} data  执行数据
+ */
+
+
+var breadthTravel = function breadthTravel(tree, id, fn, data) {
+  if (tree.id === id) {
+    tree = fn(tree, data);
+    console.log("🚀 ~ file: threeData.js ~ line 37 ~ breadthTravel ~ tree", tree);
+    return tree;
+  }
+
+  var loop = function loop(dom, id, fn, data) {
+    if (!dom) return tree;
+
+    for (var i = 0; i < dom.length; i++) {
+      if (dom[i].id === id) {
+        console.log("🚀 ~ file: threeData.js ~ line 46 ~ loop ~ dom", dom);
+        dom[i] = fn(dom[i], data);
+        return tree;
+      }
+
+      loop(dom[i].children, id, fn, data);
+    }
+  };
+
+  loop(tree.children, id, fn, data);
+  return tree;
+}; //改变样式操作
+
+
+var insertStyle = function insertStyle(dom, style) {
+  console.log("🚀 ~ file: threeData.js ~ line 59 ~ insertStyle ~ dom", dom);
+  dom.props.style = style;
+  return dom;
 };
 
 var counterSlice = (0, _toolkit.createSlice)({
@@ -121,15 +161,46 @@ var counterSlice = (0, _toolkit.createSlice)({
             "props": {
               "style": {
                 "display": "flex",
-                "alignItems": "flex-start",
                 "flexDirection": "column",
-                "backgroundColor": "rgba(0,0,0,0.20)",
+                "alignItems": "flex-start",
                 "width": "750px",
-                "height": "360px"
+                "height": "360px",
+                "backgroundColor": "rgba(0,0,0,0.20)"
               },
               "className": "container"
             },
             "children": [{
+              "componentName": "Image",
+              "id": "Image-22",
+              "rect": {},
+              "smart": {},
+              "props": {
+                "style": {
+                  "width": "240px",
+                  "height": "56px"
+                },
+                "src": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/7621f9e0111e11e993a2bb7ec41cf8a9.png",
+                "className": "actionBg"
+              }
+            }, {
+              "componentName": "Text",
+              "id": "Text-23",
+              "rect": {},
+              "smart": {},
+              "props": {
+                "style": {
+                  "marginLeft": "235px",
+                  "lineHeight": "28px",
+                  "whiteSpace": "nowrap",
+                  "color": "#ffffff",
+                  "fontFamily": "PingFangSC",
+                  "fontSize": "28px",
+                  "fontWeight": 400
+                },
+                "text": "左右旋转手机查看全景",
+                "className": "title"
+              }
+            }, {
               "componentName": "Div",
               "id": "Block-755387",
               "rect": {},
@@ -145,20 +216,7 @@ var counterSlice = (0, _toolkit.createSlice)({
                 },
                 "className": "actionBgWrap"
               },
-              "children": [{
-                "componentName": "Image",
-                "id": "Image-22",
-                "rect": {},
-                "smart": {},
-                "props": {
-                  "style": {
-                    "width": "240px",
-                    "height": "56px"
-                  },
-                  "src": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/7621f9e0111e11e993a2bb7ec41cf8a9.png",
-                  "className": "actionBg"
-                }
-              }]
+              "children": []
             }, {
               "componentName": "Div",
               "id": "Block-151940",
@@ -175,24 +233,6 @@ var counterSlice = (0, _toolkit.createSlice)({
                 "className": "block"
               },
               "children": [{
-                "componentName": "Text",
-                "id": "Text-23",
-                "rect": {},
-                "smart": {},
-                "props": {
-                  "style": {
-                    "marginLeft": "235px",
-                    "lineHeight": "28px",
-                    "whiteSpace": "nowrap",
-                    "color": "#ffffff",
-                    "fontFamily": "PingFangSC",
-                    "fontSize": "28px",
-                    "fontWeight": 400
-                  },
-                  "text": "左右旋转手机查看全景",
-                  "className": "title"
-                }
-              }, {
                 "componentName": "Div",
                 "id": "Block-465814",
                 "rect": {},
@@ -562,6 +602,12 @@ var counterSlice = (0, _toolkit.createSlice)({
     changeCurrentStyle: function changeCurrentStyle(state, action) {
       console.log("🚀 ~ file: threeData.js ~ line 524 ~ changeCurrentStyle ~ action", action);
       state.extral.currentStyle = cssTojson(action.payload.value);
+    },
+    //保存当前编辑的style到对应的dom
+    editDomStyle: function editDomStyle(state, action) {
+      console.log("🚀 ~ file: threeData.js ~ line 585 ~ editDomStyle ~ action", action); //广布遍历
+
+      breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
     }
   }
 }); // Action creators are generated for each case reducer function
@@ -570,7 +616,9 @@ exports.counterSlice = counterSlice;
 var _counterSlice$actions = counterSlice.actions,
     importData = _counterSlice$actions.importData,
     changeCurrentEditId = _counterSlice$actions.changeCurrentEditId,
-    changeCurrentStyle = _counterSlice$actions.changeCurrentStyle;
+    changeCurrentStyle = _counterSlice$actions.changeCurrentStyle,
+    editDomStyle = _counterSlice$actions.editDomStyle;
+exports.editDomStyle = editDomStyle;
 exports.changeCurrentStyle = changeCurrentStyle;
 exports.changeCurrentEditId = changeCurrentEditId;
 exports.importData = importData;

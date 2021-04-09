@@ -29,14 +29,14 @@ function Content() {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
     }
-    //声明周期监听键盘事件
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyDown);
-        //清除监听事件
-        return function cleanListener() {
-            document.removeEventListener('keydown', handleKeyDown);
-        }
-    }, []);
+    // //声明周期监听键盘事件
+    // useEffect(() => {
+    //     document.addEventListener('keydown', handleKeyDown);
+    //     //清除监听事件
+    //     return function cleanListener() {
+    //         document.removeEventListener('keydown', handleKeyDown);
+    //     }
+    // }, []);
     //键盘事件
     const handleKeyDown = (e) => {
         console.log(e);
@@ -76,6 +76,15 @@ function Content() {
         dispatch(changeCurrentStyle({ value: event.target.style.cssText }));
     }
 
+    //点击唤醒导入AST面板
+    const arouseAstPanel = (boolen) => {
+        setAstShow(boolen);
+        if (boolen) {
+            document.addEventListener('keydown', handleKeyDown);
+        } else {
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    }
     //渲染主体
     return <div className="content" id="content">
         <div className="console">
@@ -84,7 +93,7 @@ function Content() {
             <div className="i_info">1167</div>
             <div className={actionModal === 'edit' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('edit') }}>编辑模式</div>
             <div className={actionModal === 'view' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('view') }}>预览模式</div>
-            <div className="btn" onClick={() => { setAstShow(true); }}>导入AST</div>
+            <div className="btn" onClick={() => { arouseAstPanel(true); }}>导入AST</div>
             <div className="btn">导出代码</div>
 
         </div>
@@ -96,7 +105,7 @@ function Content() {
         <Drawer
             placement="top"
             closable={false}
-            onClose={() => { setAstShow(false) }}
+            onClose={() => { arouseAstPanel(false) }}
             visible={astShow}
             maskClosable={!analysisShow}
             key='ast_drawer'

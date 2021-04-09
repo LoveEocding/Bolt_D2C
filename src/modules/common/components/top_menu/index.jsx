@@ -16,15 +16,15 @@ const menuType = [
         component: ''
     },
     {
+        name: '动画',
+        component: ''
+    },
+    {
         name: '事件',
         component: ''
     },
     {
         name: '数据',
-        component: ''
-    },
-    {
-        name: '动画',
         component: ''
     },
 ]
