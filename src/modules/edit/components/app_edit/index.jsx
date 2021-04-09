@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { Drawer, message, Spin } from 'antd';
+import { Drawer, message, Spin, Menu, Dropdown } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import './index.scss';
 import { importData, changeCurrentEditId, changeCurrentStyle } from '@src/store/threeData.js';
@@ -29,14 +29,6 @@ function Content() {
         let phoneNode = document.getElementById('phone_canvas');
         let { x, y } = monitor.getSourceClientOffset();
     }
-    // //声明周期监听键盘事件
-    // useEffect(() => {
-    //     document.addEventListener('keydown', handleKeyDown);
-    //     //清除监听事件
-    //     return function cleanListener() {
-    //         document.removeEventListener('keydown', handleKeyDown);
-    //     }
-    // }, []);
     //键盘事件
     const handleKeyDown = (e) => {
         console.log(e);
@@ -85,6 +77,26 @@ function Content() {
             document.removeEventListener('keydown', handleKeyDown);
         }
     }
+    //导出代码菜单
+    const codeTypeMenu = (
+        <Menu>
+            <Menu.Item>
+                Vue2
+          </Menu.Item>
+            <Menu.Item>
+                React
+          </Menu.Item>
+            <Menu.Item>
+                普通H5
+          </Menu.Item>
+            <Menu.Item>
+                Vue3
+          </Menu.Item>
+            <Menu.Item>
+                小程序
+          </Menu.Item>
+        </Menu>
+    );
     //渲染主体
     return <div className="content" id="content">
         <div className="console">
@@ -94,8 +106,9 @@ function Content() {
             <div className={actionModal === 'edit' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('edit') }}>编辑模式</div>
             <div className={actionModal === 'view' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('view') }}>预览模式</div>
             <div className="btn" onClick={() => { arouseAstPanel(true); }}>导入AST</div>
-            <div className="btn">导出代码</div>
-
+            <Dropdown overlay={codeTypeMenu} placement="bottomCenter">
+                <div className="btn">导出代码</div>
+            </Dropdown>
         </div>
         <div className="content_panel">
             <div onClick={handerClick} className={actionModal === 'edit' ? 'phone_canvas' : 'phone_canvas phone_canvas_view'} onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
