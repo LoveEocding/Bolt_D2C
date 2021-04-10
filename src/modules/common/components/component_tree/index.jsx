@@ -2,7 +2,7 @@ import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useSelector, useDispatch } from 'react-redux'
 
-import { changeCurrentEditId, changeCurrentStyle } from '@src/store/threeData.js';
+import { changeCurrentEditId, changeCurrentStyle, changeCurrentAttr } from '@src/store/threeData.js';
 
 
 
@@ -15,6 +15,8 @@ export default function (props) {
     const handerClick = (item) => {
         dispatch(changeCurrentEditId({ value: item.id }));
         dispatch(changeCurrentStyle({ value: item.props.style }));
+        const { style, ...attr } = item.props;
+        dispatch(changeCurrentAttr({ value: attr }));
     }
 
     //组件树渲染

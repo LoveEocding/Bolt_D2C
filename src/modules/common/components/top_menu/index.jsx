@@ -5,7 +5,7 @@ import React from 'react';
 import ClassStyle from './index.module.scss';
 import { useState } from 'react';
 import StyleEdit from '@src/modules/edit/components/style_edit';
-
+import AttrEdit from '@src/modules/edit/components/attribute_panel';
 const menuType = [
     {
         name: '样式',
@@ -13,7 +13,7 @@ const menuType = [
     },
     {
         name: '属性',
-        component: ''
+        component: <AttrEdit />
     },
     {
         name: '动画',

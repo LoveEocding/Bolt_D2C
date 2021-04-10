@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.editDomStyle = exports.changeCurrentStyle = exports.changeCurrentEditId = exports.importData = exports.counterSlice = void 0;
+exports["default"] = exports.editDomAttr = exports.changeCurrentAttr = exports.editDomStyle = exports.changeCurrentStyle = exports.changeCurrentEditId = exports.importData = exports.counterSlice = void 0;
 
 var _toolkit = require("@reduxjs/toolkit");
 
@@ -69,12 +69,18 @@ var breadthTravel = function breadthTravel(tree, id, fn, data) {
 
   loop(tree.children, id, fn, data);
   return tree;
-}; //改变样式操作
+}; //改变dom样式
 
 
 var insertStyle = function insertStyle(dom, style) {
   console.log("🚀 ~ file: threeData.js ~ line 59 ~ insertStyle ~ dom", dom);
   dom.props.style = style;
+  return dom;
+}; //改变dom属性
+
+
+var insertAttr = function insertAttr(dom, attr) {
+  dom[attr.key] = attr.val;
   return dom;
 };
 
@@ -584,7 +590,9 @@ var counterSlice = (0, _toolkit.createSlice)({
     extral: {
       currentEditId: '',
       //当前编辑的ID
-      currentStyle: {} //当前编辑的style
+      currentStyle: {},
+      //当前编辑的style
+      currentAttributes: {} //当前编辑的属性 forexample text src
 
     }
   },
@@ -608,6 +616,17 @@ var counterSlice = (0, _toolkit.createSlice)({
       console.log("🚀 ~ file: threeData.js ~ line 585 ~ editDomStyle ~ action", action); //广布遍历
 
       breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
+    },
+    //保留当前正在编辑的基础属性
+    changeCurrentAttr: function changeCurrentAttr(state, action) {
+      console.log("🚀 ~ file: threeData.js ~ line 598 ~ changeCurrentAttr ~ action", action);
+      state.extral.currentAttributes = action.payload.value;
+    },
+    //编辑当前基础属性
+    editDomAttr: function editDomAttr(state, action) {
+      console.log("🚀 ~ file: threeData.js ~ line 603 ~ editDomAttr ~ action", action); //广布遍历
+
+      breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
     }
   }
 }); // Action creators are generated for each case reducer function
@@ -617,7 +636,11 @@ var _counterSlice$actions = counterSlice.actions,
     importData = _counterSlice$actions.importData,
     changeCurrentEditId = _counterSlice$actions.changeCurrentEditId,
     changeCurrentStyle = _counterSlice$actions.changeCurrentStyle,
-    editDomStyle = _counterSlice$actions.editDomStyle;
+    editDomStyle = _counterSlice$actions.editDomStyle,
+    changeCurrentAttr = _counterSlice$actions.changeCurrentAttr,
+    editDomAttr = _counterSlice$actions.editDomAttr;
+exports.editDomAttr = editDomAttr;
+exports.changeCurrentAttr = changeCurrentAttr;
 exports.editDomStyle = editDomStyle;
 exports.changeCurrentStyle = changeCurrentStyle;
 exports.changeCurrentEditId = changeCurrentEditId;

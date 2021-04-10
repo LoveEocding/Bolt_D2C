@@ -54,13 +54,19 @@ const breadthTravel = (tree, id, fn, data) => {
     return tree;
 }
 
-//改变样式操作
+//改变dom样式
 const insertStyle = (dom, style) => {
     console.log("🚀 ~ file: threeData.js ~ line 59 ~ insertStyle ~ dom", dom);
     dom.props.style = style;
     return dom;
 }
 
+
+//改变dom属性
+const insertAttr = (dom, attr) => {
+    dom[attr.key] = attr.val;
+    return dom;
+}
 
 export const counterSlice = createSlice({
     name: 'edit_page',
@@ -567,7 +573,8 @@ export const counterSlice = createSlice({
         //额外的一些辅助数据
         extral: {
             currentEditId: '', //当前编辑的ID
-            currentStyle: {}  //当前编辑的style
+            currentStyle: {},  //当前编辑的style
+            currentAttributes: {} //当前编辑的属性 forexample text src
         }
 
     },
@@ -591,11 +598,29 @@ export const counterSlice = createSlice({
             console.log("🚀 ~ file: threeData.js ~ line 585 ~ editDomStyle ~ action", action)
             //广布遍历
             breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
+        },
+        //保留当前正在编辑的基础属性
+        changeCurrentAttr(state, action) {
+            console.log("🚀 ~ file: threeData.js ~ line 598 ~ changeCurrentAttr ~ action", action)
+            state.extral.currentAttributes = action.payload.value;
+        },
+        //编辑当前基础属性
+        editDomAttr(state, action) {
+            console.log("🚀 ~ file: threeData.js ~ line 603 ~ editDomAttr ~ action", action)
+            //广布遍历
+            breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { importData, changeCurrentEditId, changeCurrentStyle, editDomStyle } = counterSlice.actions
+export const {
+    importData,
+    changeCurrentEditId,
+    changeCurrentStyle,
+    editDomStyle,
+    changeCurrentAttr,
+    editDomAttr
+} = counterSlice.actions
 
 export default counterSlice.reducer
