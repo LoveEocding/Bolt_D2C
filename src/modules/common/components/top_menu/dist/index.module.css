@@ -1,0 +1,30 @@
+.left_menu {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+.left_menu .l {
+  display: flex;
+  padding: 10px;
+  border-right: 1px solid #e8e8e8;
+  position: relative;
+}
+.left_menu .l .menu_item {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.left_menu .l .active {
+  color: #1890ff;
+}
+.left_menu .slider {
+  width: 40px;
+  height: 2px;
+  background: #1890ff;
+  transition: all 0.2s;
+}
+.left_menu .r {
+  flex: 1;
+}

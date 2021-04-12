@@ -38,6 +38,44 @@ var cssTojson = function cssTojson(val) {
   return obj;
 };
 /**
+ * 
+ * @param {*} tree 
+ * @param {*} id 
+ * @returns 找到正在编辑的Dom 广度遍历
+ */
+
+
+var findDom = function findDom(tree, id) {
+  if (tree.id === id) {
+    return tree;
+  }
+
+  var c_dom = null;
+
+  var loop = function loop(dom, id) {
+    if (!dom) return null;
+    var childDom = [];
+
+    for (var i = 0; i < dom.length; i++) {
+      if (dom[i].id === id) {
+        c_dom = dom[i];
+        console.log("🚀 ~ file: threeData.js ~ line 46 ~ loop ~ dom[i]", dom[i]);
+        return;
+      }
+
+      childDom.push(dom[i].children);
+    }
+
+    for (var _i = 0; _i < childDom.length; _i++) {
+      loop(childDom[_i], id);
+    }
+  };
+
+  loop(tree.children, id);
+  console.log("🚀 ~ file: threeData.js ~ line 59 ~ findDom ~ c_dom", c_dom);
+  return c_dom;
+};
+/**
  * 广度遍历一棵树 执行操作
  * @param {*} tree  树结构
  * @param {*} id    查询ID
@@ -80,7 +118,7 @@ var insertStyle = function insertStyle(dom, style) {
 
 
 var insertAttr = function insertAttr(dom, attr) {
-  dom[attr.key] = attr.val;
+  dom.props[attr.key] = attr.val;
   return dom;
 };
 
@@ -594,7 +632,8 @@ var counterSlice = (0, _toolkit.createSlice)({
       //当前编辑的style
       currentAttributes: {} //当前编辑的属性 forexample text src
 
-    }
+    },
+    currentDom: ''
   },
   reducers: {
     //保存导入的AST数据
@@ -605,6 +644,7 @@ var counterSlice = (0, _toolkit.createSlice)({
     //修改当前正在编辑的ID
     changeCurrentEditId: function changeCurrentEditId(state, action) {
       state.extral.currentEditId = action.payload.value;
+      state.currentDom = findDom(state.value, state.extral.currentEditId);
     },
     //修改当前正在编辑的style
     changeCurrentStyle: function changeCurrentStyle(state, action) {
@@ -613,9 +653,8 @@ var counterSlice = (0, _toolkit.createSlice)({
     },
     //保存当前编辑的style到对应的dom
     editDomStyle: function editDomStyle(state, action) {
-      console.log("🚀 ~ file: threeData.js ~ line 585 ~ editDomStyle ~ action", action); //广布遍历
-
-      breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
+      //广布遍历
+      state.value = breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
     },
     //保留当前正在编辑的基础属性
     changeCurrentAttr: function changeCurrentAttr(state, action) {
@@ -626,7 +665,7 @@ var counterSlice = (0, _toolkit.createSlice)({
     editDomAttr: function editDomAttr(state, action) {
       console.log("🚀 ~ file: threeData.js ~ line 603 ~ editDomAttr ~ action", action); //广布遍历
 
-      breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
+      state.value = breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
     }
   }
 }); // Action creators are generated for each case reducer function

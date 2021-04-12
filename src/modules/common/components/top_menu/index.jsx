@@ -38,14 +38,17 @@ export default function (props) {
     const r_menuType = menuType.map((item, index) => <div className={activeIndex === index ? `${ClassStyle.menu_item} ${ClassStyle.active}` : `${ClassStyle.menu_item}`} key={index} onClick={() => {
         setActiveIndex(index);
     }}>{item.name}</div>);
-
+    //编辑内容显示
+    const r_edit = menuType.map((item, key) => <div key={key} style={{ width: '100%', position: 'absolute', top: 0, left: `${key * 100 + '%'}` }}>{item.component}</div>);
     return <div className={ClassStyle.left_menu}>
         <div className={ClassStyle.l}>
             {r_menuType}
         </div>
         <div className={ClassStyle.slider} style={{ transform: `translate(${activeIndex * 48 + 15}px,-2px)` }}></div>
         <div className={ClassStyle.r}>
-            {menuType[activeIndex].component}
+            <div style={{ transform: `translateX(${activeIndex * -100 + '%'})`, position: 'relative' }}>
+                {r_edit}
+            </div>
         </div>
     </div>
 }

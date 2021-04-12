@@ -2,15 +2,15 @@
 import React from 'react';
 import Input from './components/Input';
 import File from './components/File';
-
-
+import { useSelector, useDispatch } from 'react-redux';
+import { editDomAttr } from '@src/store/threeData.js'
 //根据不同值选择不同的编辑组件
 export default (type, value) => {
 
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     //值改变
     const handerValueChange = (val, key) => {
-
+        dispatch(editDomAttr({ value: { key: key, val: val } }));
     }
 
     switch (type) {

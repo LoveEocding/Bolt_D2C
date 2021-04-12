@@ -26,6 +26,39 @@ const cssTojson = (val) => {
 }
 
 /**
+ * 
+ * @param {*} tree 
+ * @param {*} id 
+ * @returns 找到正在编辑的Dom 广度遍历
+ */
+const findDom = (tree, id) => {
+    if (tree.id === id) {
+        return tree;
+    }
+    let c_dom = null;
+    const loop = (dom, id) => {
+
+        if (!dom) return null;
+        const childDom = [];
+        for (let i = 0; i < dom.length; i++) {
+            if (dom[i].id === id) {
+                c_dom = dom[i]
+                console.log("🚀 ~ file: threeData.js ~ line 46 ~ loop ~ dom[i]", dom[i])
+                return;
+            }
+            childDom.push(dom[i].children);
+        }
+        for (let i = 0; i < childDom.length; i++) {
+            loop(childDom[i], id);
+        }
+    }
+    loop(tree.children, id);
+    console.log("🚀 ~ file: threeData.js ~ line 59 ~ findDom ~ c_dom", c_dom)
+    return c_dom;
+}
+
+
+/**
  * 广度遍历一棵树 执行操作
  * @param {*} tree  树结构
  * @param {*} id    查询ID
@@ -64,7 +97,7 @@ const insertStyle = (dom, style) => {
 
 //改变dom属性
 const insertAttr = (dom, attr) => {
-    dom[attr.key] = attr.val;
+    dom.props[attr.key] = attr.val;
     return dom;
 }
 
@@ -575,7 +608,8 @@ export const counterSlice = createSlice({
             currentEditId: '', //当前编辑的ID
             currentStyle: {},  //当前编辑的style
             currentAttributes: {} //当前编辑的属性 forexample text src
-        }
+        },
+        currentDom: ''
 
     },
     reducers: {
@@ -587,6 +621,7 @@ export const counterSlice = createSlice({
         //修改当前正在编辑的ID
         changeCurrentEditId(state, action) {
             state.extral.currentEditId = action.payload.value;
+            state.currentDom = findDom(state.value, state.extral.currentEditId);
         },
         //修改当前正在编辑的style
         changeCurrentStyle(state, action) {
@@ -595,9 +630,8 @@ export const counterSlice = createSlice({
         },
         //保存当前编辑的style到对应的dom
         editDomStyle(state, action) {
-            console.log("🚀 ~ file: threeData.js ~ line 585 ~ editDomStyle ~ action", action)
             //广布遍历
-            breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
+            state.value = breadthTravel(state.value, state.extral.currentEditId, insertStyle, action.payload.value);
         },
         //保留当前正在编辑的基础属性
         changeCurrentAttr(state, action) {
@@ -608,7 +642,7 @@ export const counterSlice = createSlice({
         editDomAttr(state, action) {
             console.log("🚀 ~ file: threeData.js ~ line 603 ~ editDomAttr ~ action", action)
             //广布遍历
-            breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
+            state.value = breadthTravel(state.value, state.extral.currentEditId, insertAttr, action.payload.value);
         }
     },
 })
