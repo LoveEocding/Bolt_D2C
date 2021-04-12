@@ -17,6 +17,6 @@ export default (type, value) => {
         case 'text':
             return <Input callback={handerValueChange} value={value} />
         case 'src':
-            return <File callback={handerValueChange} value={value} />
+            return <div style={{ display: 'flex', alignItems: 'center' }}> <span style={{ width: 60 }}>图片：</span> <File callback={handerValueChange} value={value} /></div>
     }
 }

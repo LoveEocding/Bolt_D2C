@@ -10,9 +10,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
  */
 export default function (props) {
     const [loading, setLoading] = useState(false);
-    const [imageUrl, setImgUrl] = useState(props.value);
-
-
+    const [imageUrl, setImgUrl] = useState('');
     //上传显示
     const uploadButton = (
         <div>

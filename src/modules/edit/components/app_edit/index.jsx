@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDrop } from 'react-dnd';
-import { Drawer, message, Spin, Menu, Dropdown } from 'antd';
+import { Drawer, message, Menu, Dropdown } from 'antd';
 import { useSelector, useDispatch } from 'react-redux'
 import './index.scss';
-import { importData, changeCurrentEditId, changeCurrentStyle } from '@src/store/threeData.js';
+import { importData } from '@src/store/threeData.js';
 import { ThreeRender } from '@src/map/react.jsx';
 
 function Content() {
@@ -60,14 +60,6 @@ function Content() {
             setAnalysisShow(false);
         }
     }
-
-    //全局点击事件
-    const handerClick = (event) => {
-        console.log(event.target.id)
-        dispatch(changeCurrentEditId({ value: event.target.id }));
-        dispatch(changeCurrentStyle({ value: event.target.style.cssText }));
-    }
-
     //点击唤醒导入AST面板
     const arouseAstPanel = (boolen) => {
         setAstShow(boolen);
@@ -111,7 +103,7 @@ function Content() {
             </Dropdown>
         </div>
         <div className="content_panel">
-            <div onClick={handerClick} className={actionModal === 'edit' ? 'phone_canvas' : 'phone_canvas phone_canvas_view'} onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
+            <div className={actionModal === 'edit' ? 'phone_canvas' : 'phone_canvas phone_canvas_view'} onKeyDown={(e) => handleKeyDown(e)} id="phone_canvas" onContextMenu={(e) => e.preventDefault()} ref={drop} style={{ border: isOver ? '1px solid #e80a0a' : '1px solid #f7f7f7' }}>
                 {ThreeRender(treeData)}
             </div>
         </div>
