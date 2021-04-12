@@ -1,6 +1,6 @@
 import React from 'react';
 import ClassStyle from './index.module.scss';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 import { changeCurrentEditId, changeCurrentStyle, changeCurrentAttr } from '@src/store/threeData.js';
 

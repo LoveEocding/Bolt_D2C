@@ -97,7 +97,7 @@ function Content() {
             <div className="i_info">1167</div>
             <div className={actionModal === 'edit' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('edit') }}>编辑模式</div>
             <div className={actionModal === 'view' ? 'btn btn_active' : 'btn'} onClick={() => { setActionModal('view') }}>预览模式</div>
-            <div className="btn" onClick={() => { arouseAstPanel(true); }}>导入AST</div>
+            <div className="btn" onClick={() => { arouseAstPanel(true); }}>导入DSL</div>
             <Dropdown overlay={codeTypeMenu} placement="bottomCenter">
                 <div className="btn">导出代码</div>
             </Dropdown>
@@ -115,7 +115,7 @@ function Content() {
             maskClosable={!analysisShow}
             key='ast_drawer'
         >
-            <h1 style={{ textAlign: 'center', color: '#928686' }}>Crtl+V 导入AST数据</h1>
+            <h1 style={{ textAlign: 'center', color: '#928686' }}>Crtl+V 导入DSL数据</h1>
             {/* 隐藏属性用于复制剪切板的 */}
             <textarea onChange={(e) => astTextHandleChange(e)} ref={astInputRef} style={{ width: '100%', border: 'none', position: 'absolute', top: -1000 }} name="ast" id="" cols="30" rows="10"></textarea>
         </Drawer>
