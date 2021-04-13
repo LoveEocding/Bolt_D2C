@@ -9,16 +9,16 @@ const menuType = [
     },
     {
         name: '页面',
-        component: <Tool />
+        component: '等待开发'
     },
     {
         name: '基础组件',
-        component: <Tool />
+        component: '等待开发'
     },
 
     {
         name: '活动组件',
-        component: <Tool />
+        component: '等待开发'
     }
 ]
 

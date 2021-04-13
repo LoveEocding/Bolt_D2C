@@ -17,15 +17,15 @@ const menuType = [
     },
     {
         name: '动画',
-        component: ''
+        component: '等待开发'
     },
     {
         name: '事件',
-        component: ''
+        component: '等待开发'
     },
     {
         name: '数据',
-        component: ''
+        component: '等待开发'
     },
 ]
 
