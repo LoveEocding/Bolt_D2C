@@ -1,6 +1,10 @@
-# 可视化活动搭建平台
+# DSL To Code 平台
 
-用于在可视化界面中，快速搭建活动页面。
+老版本根据拖拽生成DLS 数据结构的探索
+
+# 预览
+
+
 
 # install 
 
@@ -8,4 +12,9 @@ npm intall
 
 
 # run 
-http://localhost:5566/
+
+http://localhost:5566/ 
+
+# 持续集成
+
+推荐使用plop 持续集成
