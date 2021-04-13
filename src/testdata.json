@@ -1,0 +1,606 @@
+{
+  "type": "Block",
+  "id": "Block-1",
+  "props": {
+    "__VERSION__": "2.0",
+    "style": {
+      "width": 750,
+      "height": 1461
+    },
+    "attrs": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "artboardImg": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/8d2a9a709b5f11ebb05ae32d8ec95f5f.png",
+  "pluginVersion": "1.0.0",
+  "name": "画板 5 拷贝 7",
+  "reference": "psd",
+  "children": [{
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 750,
+        "height": 1461,
+        "backgroundColor": "#ffffff"
+      },
+      "attrs": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "selfId": "layerId-550",
+    "type": "Shape",
+    "id": "Shape-0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 750,
+        "height": 1461,
+        "backgroundColor": "rgba(247,247,247, 1)",
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "selfId": "layerId-2",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Shape",
+    "id": "Shape-1"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 737,
+        "height": 21
+      },
+      "attrs": {
+        "x": 6,
+        "y": 12,
+        "source": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/8d853d909b5f11ebbe0aadd426fc2e1d.png"
+      }
+    },
+    "selfId": "layerId-3",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }, {
+      "name": "矢量智能对象 拷贝 3",
+      "id": "827_3"
+    }],
+    "type": "Image",
+    "id": "Image-2"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 178,
+        "height": 29,
+        "fontSize": 30,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 30,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 306,
+        "y": 76,
+        "text": "我的收货地址",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-3_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-3_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 750,
+        "height": 531
+      },
+      "attrs": {
+        "x": 0,
+        "y": 135,
+        "source": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/917cdd909b5f11ebb05ae32d8ec95f5f.png"
+      }
+    },
+    "selfId": "layerId-5",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Image",
+    "id": "Image-4"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 687,
+        "height": 126,
+        "backgroundColor": "rgba(255,255,255, 1)",
+        "borderTopLeftRadius": 20,
+        "borderTopRightRadius": 20,
+        "borderBottomRightRadius": 20,
+        "borderBottomLeftRadius": 20,
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 32,
+        "y": 433
+      }
+    },
+    "selfId": "layerId-6",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Shape",
+    "id": "Shape-5"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 403,
+        "height": 26,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "textAlign": "left",
+        "lines": 1
+      },
+      "attrs": {
+        "x": 123,
+        "y": 467,
+        "text": "杭州娃哈哈医药保健基地祁涛北哈哈",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-6_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-6_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 87,
+        "height": 25,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "textAlign": "left",
+        "lines": 1
+      },
+      "attrs": {
+        "x": 123,
+        "y": 500,
+        "text": "路128-1",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-6_1",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-6_1"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 102,
+        "height": 29,
+        "fontSize": 26,
+        "textDecoration": "underline",
+        "color": "#e6523c",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 584,
+        "y": 484,
+        "text": "修改地址",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-7_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-7_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 684,
+        "height": 881,
+        "backgroundColor": "rgba(255,255,255, 1)",
+        "borderTopLeftRadius": 20,
+        "borderTopRightRadius": 20,
+        "borderBottomRightRadius": 20,
+        "borderBottomLeftRadius": 20,
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 33,
+        "y": 580
+      }
+    },
+    "selfId": "layerId-9",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Shape",
+    "id": "Shape-8"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 31,
+        "height": 37,
+        "backgroundColor": "rgba(22,208,255, 1)",
+        "opacity": 0.15,
+        "borderWidth": 1,
+        "borderStyle": "solid",
+        "borderColor": "#3699ff",
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 61,
+        "y": 479
+      }
+    },
+    "selfId": "layerId-11",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }, {
+      "name": "-s-location",
+      "id": "827_13"
+    }],
+    "type": "Shape",
+    "id": "Shape-9"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 29,
+        "height": 35
+      },
+      "attrs": {
+        "x": 62,
+        "y": 480,
+        "source": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/91d13f209b5f11ebb05ae32d8ec95f5f.png"
+      }
+    },
+    "selfId": "layerId-12",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }, {
+      "name": "-s-location",
+      "id": "827_13"
+    }, {
+      "name": "location",
+      "id": "827_12"
+    }],
+    "type": "Image",
+    "id": "Image-10"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 252,
+        "height": 27,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 152,
+        "y": 646,
+        "text": "详细地址，如1层305室",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-11_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-11_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 195,
+        "height": 25,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 152,
+        "y": 726,
+        "text": "请填写收货人姓名",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-12_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-12_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 247,
+        "height": 25,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 153,
+        "y": 808,
+        "text": "请填写收货人手机号码",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-13_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-13_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 72,
+        "height": 26,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 56,
+        "y": 645,
+        "text": "门牌号",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-14_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-14_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 74,
+        "height": 26,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 55,
+        "y": 725,
+        "text": "联系人",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-15_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-15_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 73,
+        "height": 26,
+        "fontSize": 26,
+        "textDecoration": "none",
+        "color": "#333333",
+        "lineHeight": 26,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 55,
+        "y": 806,
+        "text": "手机号",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-16_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-16_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 529,
+        "height": 104,
+        "backgroundColor": "rgba(229,81,59, 1)",
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 50,
+        "borderBottomRightRadius": 50,
+        "borderBottomLeftRadius": 50,
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 98,
+        "y": 1273
+      }
+    },
+    "selfId": "layerId-20",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Shape",
+    "id": "Shape-17"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 190,
+        "height": 31,
+        "fontSize": 32,
+        "textDecoration": "none",
+        "color": "#ffffff",
+        "lineHeight": 32,
+        "letterSpacing": 0,
+        "lines": 1
+      },
+      "attrs": {
+        "x": 277,
+        "y": 1307,
+        "text": "添加收货地址",
+        "lines": 1,
+        "fixed": false
+      }
+    },
+    "selfId": "layerId-18_0",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }],
+    "type": "Text",
+    "id": "Text-18_0"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 14,
+        "height": 24,
+        "backgroundColor": "rgba(22,208,255, 1)",
+        "opacity": 0.15,
+        "borderWidth": 1,
+        "borderStyle": "solid",
+        "borderColor": "#3699ff",
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 26,
+        "y": 86
+      }
+    },
+    "selfId": "layerId-23",
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }, {
+      "name": "-s-矩形 1 拷贝 9",
+      "id": "827_25"
+    }],
+    "type": "Shape",
+    "id": "Shape-19"
+  }, {
+    "__VERSION__": "2.0",
+    "props": {
+      "style": {
+        "width": 12,
+        "height": 22,
+        "overflow": "hidden"
+      },
+      "attrs": {
+        "x": 27,
+        "y": 87,
+        "source": "https://ai-sample.oss-cn-hangzhou.aliyuncs.com/test/921e9bd09b5f11eb8148d10feae38c49.png"
+      }
+    },
+    "selfId": "layerId-24",
+    "children": [],
+    "classNames": [{
+      "name": "画板 5 拷贝 7",
+      "id": "827_26"
+    }, {
+      "name": "-s-矩形 1 拷贝 9",
+      "id": "827_25"
+    }],
+    "type": "Image",
+    "id": "Image-20"
+  }]
+}

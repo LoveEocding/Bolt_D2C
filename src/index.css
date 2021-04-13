@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.icon_Page {
+  background: url('~@src/svg/pingtu.svg');
+  background-size: 100% 100%;
+}
+
+.icon_Div {
+  background: url('~@src/svg/tuceng.svg');
+  background-size: 100% 100%;
+}
+
+.icon_Image {
+  background: url('~@src/svg/tupian.svg');
+  background-size: 100% 100%;
+}
+
+.icon_Text {
+  background: url('~@src/svg/text.svg');
+  background-size: 100% 100%;
+}

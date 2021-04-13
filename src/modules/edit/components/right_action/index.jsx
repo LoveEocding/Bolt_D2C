@@ -33,7 +33,7 @@ export default function (props) {
     }
 
 
-    return <div style={{ width: `calc(40vw + ${dragWidth}px)` }} className={ClassStyle.right_action} >
+    return <div style={{ width: `calc(30vw + ${dragWidth}px)` }} className={ClassStyle.right_action} >
         <div className={ClassStyle.line}>
             <div className={ClassStyle.expend} onMouseDown={handerMouseDown} >
                 <div className={ClassStyle.t}></div>

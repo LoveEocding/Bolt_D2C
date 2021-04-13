@@ -1,5 +1,5 @@
 import React from 'react';
-import Head from '../../component/layout/head/index.jsx';
+import Head from './components/head';
 import Container from './components/container';
 import Style from './index.module.scss';
 import { DndProvider } from 'react-dnd'

@@ -1,47 +1,53 @@
 /**
- * 属性编辑面板
+ * 属性面板包括文本图片链接等.
  */
 import React from 'react';
+import { Select, Menu, Input } from 'antd';
 import ClassStyle from './index.module.scss';
-export default function ({ currentStyle }) {
-    
+import { DOM_TYPES } from '@src/domtypes/index.js';
+import { useSelector, useDispatch } from 'react-redux';
+import EditComponentByType from './attributes';
+const { Option } = Select;
+const { SubMenu } = Menu;
+//组件分类菜单
+const DomTypes = DOM_TYPES.map(item => <Option value="item">{item}</Option>);
+export default function (props) {
+    //当前编辑的属性
+    const currentAttr = useSelector((state) => state.three.extral.currentAttributes);
+    //分类改变选择
+    function handleTypeChange(value) {
+        console.log(`selected ${value}`);
+    }
+    //当前编辑属性组件
+    const AttrEdit = Object.keys(currentAttr).map(item => EditComponentByType(item, currentAttr[item]));
+    console.log("🚀 ~ file: index.jsx ~ line 24 ~ AttrEdit", AttrEdit)
+
     return <div className={ClassStyle.attribute_panel}>
-        <div className="panel_attributes">
-            <div className="panel_head" >样式属性</div>
-            {currentStyle.map(item =>
-                <>
-
-                    {item.type === 'color' ? <div className="describe">
-                        <div className="lable">{item.lable}：</div>
-                        <div className="value" onClick={() => colorPickerHand(true, item.mean)}>{item.value}</div>
-                        <div onClick={() => colorPickerHand(true, item.mean)} style={{ width: 30, height: 30, backgroundColor: item.value }}></div>
-                        {item.pickerIsShow ? <div style={{ position: 'absolute', top: 50, zIndex: 2 }}>
-                            <div style={{
-                                position: 'fixed',
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                                left: 0,
-                            }} onClick={() => colorPickerHand(false, item.mean)} />
-                            <SketchPicker color={item.value} onChangeComplete={(event) => onCompleteColor(event, item.mean)} />
-                        </div> : null}
-                    </div> :
-                        <div className="describe">
-                            <div className="lable">{item.lable}：</div>
-                            {item.type === 'select' ? <Dropdown className="value" overlay={() => styleMenu(item.mean, item.select)} placement="bottomLeft">
-                                <div onClick={e => e.preventDefault()}>
-                                    {item.value}
-                                </div>
-                            </Dropdown> : ''}
-                            {item.type === 'text' ? <div className="value" ><input value={item.value} mean={item.mean} onChange={(event) => styleChange(event, item.mean)} /></div> : ''}
-
-                        </div>}
-                </>
-            )}
-
-
-
-
+        <div className={ClassStyle.lay_top}>
+            <div className={ClassStyle.lable}>当前组件类型:</div>
+            <div className={ClassStyle.form_item}>
+                <span className={ClassStyle.form_lable}>类型转换</span>
+                <Select defaultValue="" style={{ flex: 1 }} onChange={handleTypeChange}>
+                    {DomTypes}
+                </Select>
+            </div>
         </div>
+        {/* 属性 */}
+        <Menu
+            style={{ width: '100%', padding: 0 }}
+            defaultSelectedKeys={['sub1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+        >
+            <SubMenu key="sub1" title="基础属性" style={{ background: '#c8dcfa' }}>
+                <div style={{ padding: '10px 0px' }}>
+                    {AttrEdit}
+                </div>
+
+            </SubMenu>
+            <SubMenu key="sub2" title="高级属性" style={{ background: '#c8dcfa' }}>
+
+            </SubMenu>
+        </Menu>
     </div>
 }

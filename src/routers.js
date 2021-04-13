@@ -1,6 +1,6 @@
 import React from 'react';
 import Edit from './modules/edit';
-import Test from './modules/common/components/left_menu';
+import Test from './modules/common/components/component_tree';
 import Old from './modules/old';
 export default [
     {

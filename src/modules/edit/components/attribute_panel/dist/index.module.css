@@ -1,0 +1,20 @@
+.attribute_panel {
+  width: 100%;
+  padding: 10px;
+}
+.attribute_panel .lay_top {
+  width: 100%;
+  padding-bottom: 20px;
+}
+.attribute_panel .lay_top .lable {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.attribute_panel .form_item {
+  display: flex;
+  align-items: center;
+}
+.attribute_panel .form_item .form_lable {
+  font-size: 14px;
+  margin-right: 15px;
+}

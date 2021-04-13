@@ -1,0 +1,123 @@
+.content {
+  flex: 1;
+  height: 100%;
+}
+.content .btn {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #a8a6aa;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.content .btn_active {
+  border: 1px solid #1890ff;
+}
+.content .console {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.content .console .i_lable {
+  background: white;
+  margin-right: 30px;
+  padding: 10px;
+}
+.content .console .i_info {
+  background: ghostwhite;
+  margin-right: 20px;
+  padding: 10px;
+}
+.content .content_panel {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.content .content_panel .phone_canvas {
+  min-width: 375px;
+  height: 750px;
+  padding-bottom: 100px;
+  margin: 0 auto;
+  overflow-y: scroll;
+  position: relative;
+  background: white;
+  cursor: pointer;
+}
+.content .content_panel .phone_canvas * {
+  outline: 1px dotted #d9d9d9;
+}
+.content .content_panel .phone_canvas *:hover {
+  outline: 1px dotted #1890ff;
+}
+.content .content_panel .phone_canvas_view * {
+  outline: none;
+}
+.content .content_panel .phone_canvas_view *:hover {
+  outline: none;
+}
+.content .content_panel .preview {
+  margin-left: 30px;
+}
+.content .content_panel .panel_attributes {
+  width: 20%;
+  height: 100%;
+  background: white;
+  margin-left: auto;
+}
+.content .content_panel .panel_attributes .panel_head {
+  width: 100%;
+  height: 50px;
+  background: #e6dbdf;
+  font-size: 20px;
+  line-height: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.content .content_panel .panel_attributes .describe {
+  width: 100%;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+.content .content_panel .panel_attributes .describe .action {
+  height: 40px;
+  padding: 5px 10px;
+  font-size: 16px;
+  background: #e0c0c0;
+}
+.content .content_panel .panel_attributes .describe .value {
+  min-width: 20px;
+  background: #e8e4e4;
+  padding: 5px;
+  margin-right: 10px;
+}
+.content .content_panel .panel_attributes .describe .value input {
+  display: block;
+  border: none;
+  width: 50px;
+  height: 30px;
+}
+.content .content_panel .panel_attributes .text-describe {
+  width: 100%;
+  padding: 5px 10px;
+  display: flex;
+  font-size: 16px;
+  flex-direction: column;
+}
+.content .content_panel .panel_attributes .text-describe .lable {
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.content .content_panel .panel_attributes .text-describe .value {
+  width: 100%;
+  height: 200px;
+}
+.content .content_panel .panel_attributes .text-describe .value textarea {
+  width: inherit;
+  height: inherit;
+}

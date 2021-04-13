@@ -26,7 +26,7 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
 const postcssNormalize = require('postcss-normalize');
-
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const appPackageJson = require(paths.appPackageJson);
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
@@ -510,6 +510,10 @@ module.exports = function (webpackEnv) {
       ],
     },
     plugins: [
+      new MonacoWebpackPlugin({
+        // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+        languages: ['json', 'javascript', 'scss']
+      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
